@@ -81,11 +81,11 @@ function ParseXml.parseCommon(commom)
         return a.key < v.key
     end)
 
-    CONFIG.SignInBase = {}
-    for i,v in ipairs(commom.content.re_couple.item) do
-    	table.insert(CONFIG.SignInBase,v["@attributes"])
-    end
-   
+    -- CONFIG.SignInBase = {}
+    -- for i,v in ipairs(commom.content.re_couple.item) do
+    -- 	table.insert(CONFIG.SignInBase,v["@attributes"])
+    -- end
+   	-- dump(commom.content.vipmobile.item,"",5)
     data = {}
     CONFIG.vipAdd = {}
     CONFIG.storeItems = {}
@@ -97,12 +97,25 @@ function ParseXml.parseCommon(commom)
 		end
 		table.insert( CONFIG.storeItems,data)
     end
-    CONFIG.level = {}
+    -- CONFIG.level = {}
     -- dump(commom.content.required,"",5)
-    for i,v in ipairs(commom.content.required.item) do
-    	table.insert(CONFIG.level,v["@attributes"])
-    end
-  
+    -- for i,v in ipairs(commom.content.required.item) do
+    -- 	table.insert(CONFIG.level,v["@attributes"])
+    -- end
+    --配制
+  	-- local config = commom.content.sysnum.item
+  	-- dump(config,"",5)
+ --  	CONFIG.SignInCycle = config[2]["@attributes"].count
+	-- CONFIG.slot.isopen = config[17]["@attributes"].count == "1" and true or false
+	-- CONFIG.slot.wingame =  checkint(config[18]["@attributes"].count)
+	-- CONFIG.activity =  config[20]["@attributes"].count == "1" and true or false
+	-- CONFIG.storeVipCard =  config[21]["@attributes"].count == "1" and true or false
+	-- CONFIG.rankingAdderss =  config[22]["@attributes"].count == "1" and true or false
+	-- CONFIG.turntable =  config[23]["@attributes"].count == "1" and true or false
+	-- CONFIG.turntableVip =  config[24]["@attributes"].count == "1" and true or false
+	-- CONFIG.WCHAT_PAY =  config[26]["@attributes"].count == "1" and true or false
+	-- CONFIG.openActivity =  config[27]["@attributes"].count == "1" and true or false
+	-- CONFIG.getUserInfo =  config[28]["@attributes"].count == "1" and true or false
 end
 
 function ParseXml.parseProp(prop)
@@ -110,7 +123,7 @@ function ParseXml.parseProp(prop)
 	local pcate
 	local pframe
 	-- dump(prop.content.props,"",5)
-	CONFIG.GIFT = {}
+	CONFIG.gift = {}
 	for k , v in pairs(prop.content.props) do
 		local info = v["@attributes"]
 		pcate = checkint(info.pcate)
@@ -126,7 +139,7 @@ function ParseXml.parseProp(prop)
 				data[key].name = info.name
 				data[key].day =   checkint(info.validity)
 			if info.mtype == "1" then
-				table.insert(CONFIG.GIFT , data[key])	
+				table.insert(CONFIG.gift , data[key])	
 			end
 		end
 	end	

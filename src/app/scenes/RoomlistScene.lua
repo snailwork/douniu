@@ -18,7 +18,6 @@ function RoomlistScene:ctor()
 			index = 1
 			panel_item = model:clone()
 			panel_item:setVisible(true)
-			dump(panel_item)
 			listview:pushBackCustomItem(panel_item)
 		end
 		local item = panel_item:getChildByTag(index)
@@ -35,11 +34,12 @@ function RoomlistScene:ctor()
     for i=1,2 do
     	roomlist:getChildByTag(i):addTouchEventListener(handler(self, self["fun"..i]))
     end
+   
+    
 end
 
 function RoomlistScene:toPlay(target, event )
     if not self:btnScale(target, event) then return end
-    dump(CONFIG.roominfo[checkint(target:getTag())])
     display.replaceScene(require("app.scenes.GameScene").new(CONFIG.roominfo[checkint(target:getTag())]))
 end
 

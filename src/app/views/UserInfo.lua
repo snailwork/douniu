@@ -5,6 +5,7 @@ local UserInfo = class("UserInfo", function()
 end)
 --3cb2e2
 function UserInfo:ctor(data,callback)
+	self:addTo(display.getRunningScene(),101)
 	self.callback = callback
 	self:setNodeEventEnabled(true)
 	self.data = data
@@ -21,7 +22,18 @@ function UserInfo:ctor(data,callback)
     panel_bg:setContentSize(display.width,display.height)
     
 	panel:getChildByTag(501):addTouchEventListener(handler(self,self.close))     --关闭按钮
-	panel_bg:addTouchEventListener(handler(self,self.close))
+	panel_bg:addTouchEventListener(function (target, event)
+        if event == 0 then
+            target:setScale(0.9)
+        elseif event == 3 or event == 2 then
+            target:setScale(1)
+        end
+        if event ~= ccui.TouchEventType.ended then
+            return
+        end
+        utils.playSound("click")
+        self:hide()
+    end)
 
 	self.parts["base-info"] = panel:getChildByTag(444)     --基本信息
 	self.parts["list"] = self.parts["base-info"]:getChildByTag(487)
@@ -46,8 +58,9 @@ function UserInfo:ctor(data,callback)
 
 	local head = utils.makeAvatar(data)     --头像
 		:align(display.CENTER,189,395)
-		:addTo(self.parts["base-info"])
+		:addTo(self.parts["base-info"],-1)
     self.parts["head"] = head
+    head:setScale(1.2)
 	self:getUserData()
 end
 
@@ -249,6 +262,7 @@ function UserInfo:initProps( )
 end
 
 function UserInfo:close(target , event)
+	
 	if event ~= ccui.TouchEventType.ended then
 		return
 	end
@@ -310,7 +324,7 @@ function UserInfo:updataBasicInfo()
 		self.parts["base-info"]:getChildByTag(4):setPercent(0)
 	end
 
-	local chipstr = checkint(self.data.chip) > 1e6 and utils.numAbbrZh(self.data.gold) or utils.formatNumber(self.data.gold)
+	local chipstr = checkint(self.data.gold) > 1e6 and utils.numAbbrZh(self.data.gold) or utils.formatNumber(self.data.gold)
     local  data = {}
     data[1] = self.data.name
     data[2] = "$"..chipstr

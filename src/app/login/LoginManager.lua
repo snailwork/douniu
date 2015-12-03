@@ -46,7 +46,7 @@ function LoginManager.callback (data)
 			
 			--拿活动的xml活动配制，房间
 			LoginManager.parserRoomCfg()
-			-- LoginManager.parserPropsCfg()
+			LoginManager.parserCommon()
 			-- LoginManager.parserAwardCfg()
 			-- if device.platform == "ios" then
 			-- 	utils.callStaticMethod("Helper","recordPermission",{callback = function ( data)
@@ -204,7 +204,7 @@ function LoginManager.parserRoomCfg()
 		utils.loadData(CONFIG.dataUrl.."room.data", function ( isok  , roomdata )
 			if isok then
 				ParseXml.parseRoomInfo(roomdata.content.room)
-				dump(CONFIG.roominfo)
+				-- dump(CONFIG.roominfo)
 				utils.saveFile(filename,CONFIG.roominfo)
 				utils.setUserSetting("room_version" , CONFIG.ver)
 			end
@@ -221,6 +221,7 @@ function LoginManager.parserPropsCfg()
 		ParseXml.parseProp(CONFIG.PROP)
 		return 
 	end
+	
     utils.loadData(CONFIG.dataUrl.."props"..CONFIG.appversion..".data", function ( isok , data )
 		if isok then
 			utils.saveFile(filename,data)
@@ -231,11 +232,12 @@ function LoginManager.parserPropsCfg()
 
 end
 
-function LoginManager.parserAwardCfg()
+function LoginManager.parserCommon()
 	local filename = device.writablePath.."common.data"
     if CONFIG.ver == utils.getUserSetting("common_version" , 0) then
-		CONFIG.COMMON = utils.readeFile(filename)
-		ParseXml.parseCommon(CONFIG.COMMON) --解析
+		-- CONFIG.COMMON = utils.readeFile(filename)
+		-- ParseXml.parseCommon(CONFIG.COMMON) --解析
+		ParseXml.parseCommon(utils.readeFile(filename)) --解析
 		return 
 	end
     utils.loadData(CONFIG.dataUrl.."common"..CONFIG.appversion..".data", function ( isok , data )

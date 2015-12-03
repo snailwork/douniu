@@ -7,6 +7,7 @@ require("app.tools.libext")
 require("app.tools.deprecated")
 require("app.tools.tips")
 
+Loading = require("app.tools.Loading")
 utils = require("app.tools.utils")
 SocketTCP = require("framework.cc.net.SocketTCP")
 scheduler = require("framework.scheduler")
@@ -36,7 +37,6 @@ CONFIG = {
 	lType = 1,
 	channel = 2000,
     niuType = {"牛一","牛二","牛三","牛四","牛五","牛六","牛七","牛八","牛九","牛牛","","炸弹","五花牛","五小牛"}
-	
 }
 USER = {}
 CMD = {
@@ -75,6 +75,28 @@ CMD = {
     RE_LOGIN_ROOMINOF = 1109,
     --重连
     RE_LOGIN = 1110,
+    
+    --在线时长，和玩牌数的数据
+    SERVER_PUSH_PLAYER_PLAYING_TIME           = 1036, 
+    --任务推送
+    PUSH_MISSION_COM_STATUS             = 1053,
+    MISSION_COM_STATUS             = 1055,
+
+
+     --客户端请求赠送礼物 购买礼物
+    CLIENT_REQUEST_PRESENT_GIFT               = 3001,
+    --用户请求存钱
+    BANK_SAVE_MONEY                           = 3011,
+    --用户请求取钱
+    BANK_TAKE_MONEY                           = 3012,
+    --转账
+    BANK_TURN_MONEY                           = 3013,
+    --追踪用户
+    BANK_TURN_MONEY                           = 3016,
+    --修改银行密码
+    CLIENT_REQUES_UPDATE_PASSWD               = 3024,
+
+
 }
 ERR_INFO = {}
 ERR_INFO["1000-2"] = "会话KEY校验失败"
@@ -90,8 +112,15 @@ end
 
 function MyApp:run()
     cc.FileUtils:getInstance():addSearchPath("res/")
-    self:enterScene("MainScene")
-    -- CONFIG.channel = Launcher.channel
+
+    CONFIG.appversion = device.getAppVersion()
+    CONFIG.seat={}
+    CONFIG.seat[1] = 1
+    CONFIG.seat[3] = 2
+    CONFIG.seat[5] = 3
+    CONFIG.seat[7] = 4
+    CONFIG.seat[9] = 5
+
     CONFIG.cardVal ={}
     CONFIG.cardVal["1"] = 1
     CONFIG.cardVal["2"] = 2
@@ -107,6 +136,8 @@ function MyApp:run()
     CONFIG.cardVal.Q = 10
     CONFIG.cardVal.K = 10
     CONFIG.cardVal.A = 1
+    -- CONFIG.channel = Launcher.channel
+    self:enterScene("MainScene")
 end
 
 return MyApp

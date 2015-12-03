@@ -32,7 +32,7 @@ end
 function ParseSocket:reCon ( msg )
 	msg = msg or "网络连接被断开，请重新登陆！"
 	self.neddHeart = false
-    showDialogTip("",msg,{"确定"},function ( flag )
+    showDialogTip(msg,{"确定"},function ( flag )
 		NetManager.close()
 		SceneManager.switch("LoginScene")
 	end)
@@ -132,39 +132,47 @@ function ParseSocket:fun1005(packet ,cmd)
 		yearVip =  packet:readInt(),
 		seatid = packet:readInt()
 	}
-	self.socketEvent:dispatchEvent({name = cmd,data = data})
+	data.seatid = CONFIG.seat[data.seatid]
+	self.socketEvent:dispatchEvent({name = cmd,data = {data}})
 end
 
 --推送房间里玩家信息
 function ParseSocket:fun1002(packet ,cmd)
-	local data = {	
-		status = packet:readInt(),
-		round = packet:readInt(),
-		seatid = packet:readInt(),
+	local data = {}
+	local status = packet:readInt()
+	local num = packet:readInt()
+	dump(num)
+	for i=1,num do
+		dump(i)
+		data[i] = {	
+			seatid = packet:readInt(),
 
-		mid = packet:readInt(),
-		plaformid = packet:readInt(),
-		iconid = packet:readInt(),
-		sex = packet:readInt(),
+			mid = packet:readInt(),
+			plaformid = packet:readInt(),
+			iconid = packet:readInt(),
+			sex = packet:readInt(),
 
-		name = packet:readString(),
-		icon = packet:readString(),
+			name = packet:readString(),
+			icon = packet:readString(),
 
-		yellowVip =  packet:readInt(),
-		yearVip =  packet:readInt(),
-		vip =  packet:readInt(),
-		
-		gold =  packet:readLongInt(),
-		score =  packet:readInt(),
-		playNum =  packet:readInt(),
-		winNum =  packet:readInt(),
-		goldRank =  packet:readInt(),
-		winRank =  packet:readInt(), --赢点排名
+			yellowVip =  packet:readInt(),
+			yearVip =  packet:readInt(),
+			vip =  packet:readInt(),
+			
+			gold =  packet:readLongInt(),
+			score =  packet:readLongInt(),
+			playNum =  packet:readInt(),
+			winNum =  packet:readInt(),
+			goldRank =  packet:readInt(),
+			winRank =  packet:readInt(), --赢点排名
 
-		giftPcate = packet:readInt(),
-		giftFrame = packet:readInt(),
-		banned = packet:readInt(),
-	}
+			giftPcate = packet:readInt(),
+			giftFrame = packet:readInt(),
+			banned = packet:readInt(),
+		}
+		data[i].seatid = CONFIG.seat[data[i].seatid]
+		data[i].status = status
+	end
 	-- utils.__merge(data,self:readPlayer(packet))
 	dump(data)
 	-- app:dispatchEvent({name = cmd,data = data})
@@ -181,6 +189,7 @@ function ParseSocket:fun1101(packet ,cmd)
 	if data.err == 0 then
 		packet:readInt()
 		data.seatid = packet:readInt()
+		data.seatid = CONFIG.seat[data.seatid]
 		self.socketEvent:dispatchEvent({name = cmd,data = data})
 	else
 		showDialogTip("进入房间失败！",{"返回大厅"},function ( flag )
@@ -207,6 +216,7 @@ function ParseSocket:fun1103(packet ,cmd)
 		seatid = packet:readInt(),
 		qiang = packet:readInt(),
 	}
+	data.seatid = CONFIG.seat[data.seatid]
 	dump(data)
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
 end
@@ -217,6 +227,7 @@ function ParseSocket:fun1104(packet ,cmd)
 		dealer = packet:readInt(),
 		bei = {}
 	}
+	data.dealer = CONFIG.seat[data.dealer]
 	dump(data)
 	if data.dealer ~= checkint(USER.seatid) then
 		for i=1,4 do
@@ -236,6 +247,7 @@ function ParseSocket:fun1105(packet ,cmd)
 	if data.err == 0 then
 		data.seatid = packet:readInt()
 		data.bei = packet:readInt()
+		data.seatid = CONFIG.seat[data.seatid]
 		self.socketEvent:dispatchEvent({name = cmd,data = data})
 	end
 	dump(data)
@@ -264,6 +276,8 @@ function ParseSocket:fun1107(packet ,cmd)
 		ctype = packet:readInt()
 	}
 	dump(data)
+	data.seatid = CONFIG.seat[data.seatid]
+	dump(data)
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
 end
 
@@ -277,6 +291,8 @@ function ParseSocket:fun1108(packet ,cmd)
 			win = packet:readLongInt(),
 			gold = packet:readLongInt(),
 		}
+		dump(data[i])
+		data[i].seatid = CONFIG.seat[data[i].seatid]
 	end
 	dump(data)
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
@@ -287,23 +303,23 @@ function ParseSocket:fun1109(packet ,cmd)
 	local data = {
 		roomStatus = packet:readInt(),
 	}
-	dump(data)
 	if data.roomStatus ~= 1 then
 		return
 	end
 	data.dealer = packet:readInt()
+	data.dealer = CONFIG.seat[data.dealer]
+	data.dealer = data.dealer or 0
 	data.gameStatus = packet:readInt()
 	data.seats = {}
 	local num = packet:readInt()
-	dump(num)
 	for i=1,num do
-		dump(i)
 		data.seats[i] = {
 			seatid = packet:readInt(),
 			qiang = packet:readInt(),
 			bei = packet:readInt(),
 			isShowCard = packet:readInt(),
 		}
+		data.seats[i].seatid = CONFIG.seat[data.seats[i].seatid]
 		-- dump(data)
 		if data.seats[i].isShowCard == 1 then
 			data.seats[i].cards = {
@@ -343,12 +359,16 @@ function ParseSocket:fun1110(packet ,cmd)
 end
 --重连进房间
 function ParseSocket:fun1999(packet ,cmd)
-	-- SendCMD:quickInRoom(1000)
+	display.replaceScene(require("app.scenes.GameScene").new())
 end
 
 --退出房间
 function ParseSocket:fun1004(packet ,cmd)
-	self.socketEvent:dispatchEvent({name = cmd})
+	local data = {
+		mid = packet:readInt()
+	}
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
 end
 
 --login
@@ -362,7 +382,7 @@ function ParseSocket:fun1000(packet ,cmd)
 			USER.relogin = true
 		elseif data.err == 4 or data.err == 5 then
 			--服务器停服
-			showDialogTip("","服务器维护中，请稍后！",{"确定"},function ( flag )
+			showDialogTip("服务器维护中，请稍后！",{"确定"},function ( flag )
 				NetManager.close()
 				SceneManager.switch("LoginScene")
 			end)
@@ -373,6 +393,60 @@ function ParseSocket:fun1000(packet ,cmd)
 		self.neddHeart =  true
 	end
 	app:dispatchEvent({name = "app.login",data = data})
+end
+
+
+-- --任务数据推送
+function ParseSocket:fun1036(packet,cmd)
+	local data = {
+		online_time = packet:readInt(),
+		reward_frequency = packet:readInt(),
+		-- hot_online_time = packet:readInt(),
+		-- hot_reward_frequency = packet:readInt(),
+	}
+	
+	CONFIG.MISSION_COM = data
+	if data.reward_frequency > 0 or data.hot_reward_frequency > 0 then
+		self.socketEvent:dispatchEvent({name = 1053,data = {status = 1}})
+	end
+end 
+
+--任务数据
+function ParseSocket:fun1055(packet,cmd)
+	local data = {}
+	local num = packet:readInt()
+	for i=1,num do
+		data[i] = {
+			pcate = packet:readInt(),
+			pframe = packet:readInt(),
+			status = packet:readInt(), --0未完成 1完成 2领取过奖励
+			comNum = packet:readInt()
+		}
+		if CONFIG.task[data[i].pcate..data[i].pframe] then 
+			CONFIG.task[data[i].pcate..data[i].pframe].status = data[i].status
+			CONFIG.task[data[i].pcate..data[i].pframe].comNum = data[i].comNum --完成的次数，时间任务就是已经完成的时间（已经过了的时间）
+		end
+	end
+	
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+--任务完成推送
+function ParseSocket:fun1053(packet,cmd)
+	local data = {
+		pcate = packet:readInt(),
+		pframe = packet:readInt(),
+		status = packet:readInt(), --0未完成 1完成 2领取过奖励
+		comNum = packet:readInt()
+	}
+	if CONFIG.task[data.pcate..data.pframe] then
+		CONFIG.task[data.pcate..data.pframe].status = data.status
+		CONFIG.task[data.pcate..data.pframe].comNum = data.comNum
+	end
+	
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+	-- if data.status > 0 then
+	-- 	utils.playSound("mis-com-tip")
+	-- end
 end
 
 return ParseSocket

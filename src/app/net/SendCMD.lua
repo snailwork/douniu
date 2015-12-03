@@ -46,6 +46,17 @@ function SendCMD:quickInRoom(server_id,typeId)
     self.socket:send(packet)
 end
 
+function SendCMD:inRoom(server_id,rid)
+    local packet = ByteArray.new()
+    packet:Begin(CMD.IN_ROOM)
+    packet:writeInt(server_id)
+    packet:writeInt(rid)
+    packet:End()
+    self.socket:send(packet)
+end
+
+
+
 --用户请求离开房间
 function SendCMD:outRoom()
     -- utils.callStaticMethod("MyGotye","outRoom",nil,nil,"()V")

@@ -80,7 +80,7 @@ function GameScene:setCalculate(target, event )
 end
 
 function GameScene:ctor(data)
-    data = data or {}
+    data = data or {typeId = 29}
     -- data = {typeId = 29}
     for k,v in pairs(CONFIG.roominfo) do
         if v.min <= USER.gold then
@@ -132,7 +132,6 @@ function GameScene:ctor(data)
 
     	self.parts["event"] = GameEvent.new(self)
         self.parts["sysMsg"] = SysMsg.new(layer:getChildByTag(385))
-        
         SendCMD:quickInRoom(1000,data.typeId)
         -- self.parts["delay-http"] = performWithDelay(self,function ( ... )
         --     showDialogTip("提示", "网络连接出错，请检查wifi是否连接正常" , {"确定"} , function (isOK)
@@ -201,7 +200,6 @@ function GameScene:onSeatClick(seat_)
                     function ( ... )
                     self.parts["user_info"] = nil
                 end)
-                display.getRunningScene():addChild(user_info,45)
                 self.parts["user_info"] = user_info
             end
         end
@@ -227,12 +225,16 @@ function GameScene:onEnterFrame()
     table.sort(data,function(a,b) --从小到大的座位号排序
         return a.model.baseId < b.model.baseId
     end)
-    data = self.parts["seats"]
+    -- data = self.parts["seats"]
     for i,v in ipairs(data) do
         if i == index then
             v.parts["dealer"]:setVisible(true)
             if v.model.seatid == self.parts["dealer-seatid"] then
-
+                    for i1,v1 in ipairs(data) do
+                        if v1.model.seatid ~= self.parts["dealer-seatid"] then
+                            v1.parts["dealer"]:setVisible(false)
+                        end
+                    end
                 self.parts["dealer-seatid"] = -1
                 -- transition.stopTarget(self.scheduler)
                 transition.removeAction(self.scheduler)
@@ -243,9 +245,6 @@ function GameScene:onEnterFrame()
                     self:setDealerPos(v)
                     transition.fadeIn(self.parts["dealer"],{scale = 1,time = 0.1,})
                     transition.scaleTo(self.parts["dealer"],{scale = 1,time = 0.3,})
-                    -- for i1,v1 in ipairs(self.parts["seats"]) do
-                    --     v1.parts["qiangZhuang"]:setVisible(false)
-                    -- end
                 end,1)
                 index = 1
                 break
@@ -262,20 +261,28 @@ end
 
 function GameScene:setDealerPos(seat)
     local _x = -22
-    if table.indexof({2,4},seat.model.seatid) then
+    if table.indexof({5,4},seat.model.seatid) then
         _x = 55
     end
     self.parts["dealer"]:setPosition(seat.parts["seat"]:getPositionX() + _x,seat.parts["seat"]:getPositionY()+60)
 end
 
 function GameScene:setDealer(seatid)
+    if not self.parts["dealerData"] then return end
     local qiang = {}
     for i,v in ipairs(self.parts["dealerData"]) do
         if v.qiang == 1 then
             table.insert(qiang,self.parts["seats"][v.seatid])
         end
     end
-    dump(qiang)
+    if #qiang == 0 then
+        for i,v in ipairs(self.parts["seats"]) do
+            if v.model.mid > 0 then
+                table.insert(qiang,v)
+            end
+        end
+    end
+    -- dump(qiang)
     self.parts["qiangData"] = qiang
     if self.scheduler then
         transition.removeAction(self.scheduler)
@@ -322,10 +329,17 @@ end
 
 
 function GameScene:moveToSeat(seatid,to_seatid,callback)
-    dump(seatid)
-    dump(to_seatid)
-    local seat = self.parts["seatPanel"]:getChildByTag(seatid)
-    local to_seat = self.parts["seatPanel"]:getChildByTag(to_seatid)
+    local seat,to_seat
+    for i,v in ipairs(self.parts["seats"]) do
+        if v.model.seatid == seatid then
+            seat = v.parts["seat"]
+        elseif v.model.seatid == to_seatid then
+            to_seat = v.parts["seat"]
+        end
+    end
+    if not seat or not to_seat then return end
+    -- local seat = self.parts["seatPanel"]:getChildByTag(seatid)
+    -- local to_seat = self.parts["seatPanel"]:getChildByTag(to_seatid)
     local point = self.parts["batchChip"]:convertToNodeSpace(seat:convertToWorldSpace(cc.p(120,120)))
     local to_point = self.parts["batchChip"]:convertToNodeSpace(to_seat:convertToWorldSpace(cc.p(120,120)))
     local t,action = 0.4
@@ -368,7 +382,11 @@ function GameScene:startDealCard(cards)
     for i,v in ipairs(self.parts["seats"]) do
         v:reset()
         if v.model.mid > 0 then
-            table.insert(data,v)
+            if v.model.mid == USER.mid then
+                 table.insert(data,1,v)
+            else
+                table.insert(data,v)
+            end
         end
     end
     
@@ -400,7 +418,7 @@ function GameScene:startDealCard(cards)
                     transition.execute(card,action,{onComplete = function ( )
                         card:removeSelf(true)
                         convert_sp:setVisible(true)
-                        if #data == i and j == 5 then
+                        if v.model.mid == USER.mid and j == 5 then
                             self.parts["delay"][#self.parts["delay"] +1 ] = performWithDelay(self,function()
                                 self.parts["seats"][USER.seatid]:showCard(1,3,cards,false,function ( )
                                     

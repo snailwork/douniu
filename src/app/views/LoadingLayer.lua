@@ -123,8 +123,7 @@ function LoadingLayer:onEnter()
 	local acts = {}
 	acts[1] = cca.delay(50)
 	acts[2] = cca.cb(function ( )
-		showDialogTip("提示", "网络连接出错，请检查wifi是否连接正常" , {"确定"} , function (isOK)
-			-- self._cur_finish
+		showDialogTip("网络连接出错，请检查wifi是否连接正常" , {"确定"} , function (isOK)
 					SceneManager.switch("LoginScene")
 				end)
 	end)
@@ -297,8 +296,8 @@ function LoadingLayer:changeScene()
 	-- do return end
 	dump(CONFIG.lType)
 	if CONFIG.lType == 3 then
-		display.replaceScene(require("app.scenes.RoomlistScene").new(self.data))
-		-- display.replaceScene(require("app.scenes.HallScene").new(self.data))
+		-- display.replaceScene(require("app.scenes.RoomlistScene").new(self.data))
+		display.replaceScene(require("app.scenes.HallScene").new(self.data))
 	elseif table.indexof({4,5},CONFIG.lType) then
 		display.replaceScene(require("app.scenes.GameScene").new(self.data))
 	elseif CONFIG.lType == 2 then
