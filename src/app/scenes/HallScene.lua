@@ -5,18 +5,24 @@ end)
 
 function HallScene:ctor()
     self.parts= {}
-	local hall = cc.uiloader:load("hall.csb"):addTo(self)
+    self.parts["item"] = {}
+    local hall = cc.uiloader:load("hall.csb"):addTo(self)
+    self.parts["hall"] = hall
     local top = require("app.views.Top").new(hall:getChildByTag(182),self)
     self.parts["top"] = top
     
     local listview = hall:getChildByTag(294):getChildByTag(504)
     self.parts["listview"] = listview
-    local model = hall:getChildByTag(165):getChildByTag(1)
+    local model = hall:getChildByTag(294):getChildByTag(1)
     self.parts["model"] = model
     model:setVisible(false)
    
     for i=1,9 do
-    	hall:getChildByTag(508):getChildByTag(i):addTouchEventListener(handler(self, self["fun"..i]))
+        if i <= 3 then
+    	   hall:getChildByTag(i):addTouchEventListener(handler(self, self["fun"..i]))
+        else
+           hall:getChildByTag(508):getChildByTag(i):addTouchEventListener(handler(self, self["fun"..i]))
+        end
     end
     self:initOnLine()
 
@@ -37,7 +43,6 @@ function HallScene:initOnLine(  )
                 if data.svflag ~= 1 then
                     -- createPromptBox("获取排行榜数据出错!")
                 else
-                    -- dump(data,"",5)
                     for k,v in pairs(data.data.arr) do
                         -- dump(v)
                         local item = self.parts["model"]:clone()
@@ -49,7 +54,7 @@ function HallScene:initOnLine(  )
                             if checkint(v[12]) == 0 then
                                 item:getChildByTag(3):setString("大厅")
                             else
-                                item:getChildByTag(3)::setString("房间:"..v[12])
+                                item:getChildByTag(3):setString("房间:"..v[12])
                             end
                         else
                             item:getChildByTag(3):setColor(cc.c3b(149,149,149))
@@ -116,6 +121,20 @@ function HallScene:initOnLine(  )
     
 end
 
+function HallScene:updataNewsCount()
+    local count = 0
+    for k , v in ipairs(CONFIG.news) do
+        if v.status == 1 then
+            count = count + 1
+        end
+    end
+    if count > 0 then
+        self.parts["top"].parts["count_img"]:setVisible(true)
+    else    
+        self.parts["top"].parts["count_img"]:setVisible(false)
+    end
+end
+
 function HallScene:btnScale(target, event )
     if event == 0 then
         target:setScale(0.9)
@@ -146,6 +165,12 @@ end
 --shop
 function HallScene:fun4(target, event )
     if not self:btnScale(target, event) then return end
+    self.parts["top"].parts["head"]:setVisible(false)
+    self.parts["hall"]:setOpacity(0)
+    performWithDelay(self.parts["hall"],function ( ... )
+        self.parts["hall"]:setOpacity(255)
+        self.parts["top"].parts["head"]:setVisible(true)
+    end,1)
     self.parts["item"]["Store"] =require("app.views.Store").new(function (  )
             self.parts["item"]["Store"] = nil
         end)
@@ -161,7 +186,7 @@ function HallScene:fun6(target, event )
     if not self:btnScale(target, event) then return end
     self.parts["item"]["Task"] = require("app.views.Task").new(function (  )
             self.parts["item"]["Task"] = nil
-        end))
+        end)
 end
 
 --bank
@@ -191,8 +216,10 @@ function HallScene:fun9(target, event )
         end,self)
 end
 
-function HallScene:onEnter()
-	
+function HallScene:showFeedback(about)
+    self.parts["item"]["feedback"] = require("app.views.FeedBack").new(function ()
+        self.parts["item"]["feedback"] = nil
+    end,about)
 end
 
 function HallScene:onExit()
@@ -210,7 +237,7 @@ function HallScene:androidBack(event)
                 return
             end
         end
-        showDialogTip(,"确定退出游戏吗？",{"取消","确定"},function ( flag )
+        showDialogTip("确定退出游戏吗？",{"取消","确定"},function ( flag )
             if flag then
                 exitApp()
             end

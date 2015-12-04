@@ -6,6 +6,7 @@ end)
 
 function RankingLayer:ctor( callback ,prant)
 	self:addTo(display.getRunningScene(),100)
+	self.parts={}
 	self.parts["prant"] = prant
 	Loading.create()
 	self.callback = callback
@@ -16,13 +17,16 @@ function RankingLayer:ctor( callback ,prant)
 	local bg = cc.uiloader:seekNodeByTag(self._widget , 82)
 	bg:setContentSize(display.width,display.height)
 
+	bg:setOpacity(0)
+	self._widget:setScale(0.2)
+	transition.scaleTo(self._widget, {scale = 1, time = 0.4,easing = "BACKOUT",onComplete = function ( )
+		transition.fadeIn(bg,{time = 0.2})
+	end})
+
 	self.RANK = {}
 	self:init()
 	self.RankType = {}
-	self.RankType.Rich = 1
-	self.RankType.Win = 2
-	self.curType = self.RankType.Rich
-	self:setRankType(self.curType)
+	self:setRankType(1)
 	cc.uiloader:seekNodeByTag(self._widget , 1833):setVisible(false)
 
 	self.handler = app:addEventListener("app.ranking_reload", function(event)
@@ -68,20 +72,16 @@ function RankingLayer:init()
 	end)
 
 	function selectedEvent(sender , eventType )
-		local tag = sender:getTag()
-		local ranktype = self.RankType.Rich
-		if checkint(tag) == 182 then
-			ranktype = self.RankType.Win
-		end
 		if eventType ~= 2 then return end
-			utils.playSound("click")
-			self:setRankType(ranktype)
+		utils.playSound("click")
+		dump(checkint(sender:getTag()))
+		dump(checkint(sender:getTag()) == 182 and 1 or 2)
+		self:setRankType(checkint(sender:getTag()) == 182 and 1 or 2)
 	end
-	local btn = cc.uiloader:seekNodeByTag(self._widget , 184)
-	btn:addTouchEventListener(selectedEvent)
 
-	btn = cc.uiloader:seekNodeByTag(self._widget , 182)
-	btn:addTouchEventListener(selectedEvent)
+	self._widget:getChildByTag(83):getChildByTag(184):addTouchEventListener(selectedEvent)
+	self._widget:getChildByTag(83):getChildByTag(182):addTouchEventListener(selectedEvent)
+
 
 end
 
@@ -179,7 +179,6 @@ function RankingLayer:reload(ranktype)
 		-- if k > 3 or (v[1] == USER.mid and k > 3) then
 			local rankingText = k
 			if v[1] == USER.mid then
-				dump(USER.Ranking)
 				if USER.Ranking then
 					rankingText = USER.Ranking[ranktype]
 				else
@@ -222,8 +221,6 @@ function RankingLayer:reload(ranktype)
 end
 
 function RankingLayer:httpGetTop(ranktype)
-	self.curType = ranktype
-	
 	function back_cb(data)
 		Loading.close()
 		if data.svflag ~= 1 then
@@ -241,17 +238,18 @@ function RankingLayer:httpGetTop(ranktype)
 end
 
 function RankingLayer:setRankType(ranktype)
-	local rich_ck = cc.uiloader:seekNodeByTag(self._widget , 184)
+	dump(ranktype)
+	local win_ck = cc.uiloader:seekNodeByTag(self._widget , 184)
 	
-	local win_ck = cc.uiloader:seekNodeByTag(self._widget , 182)
-	
+	local rich_ck = cc.uiloader:seekNodeByTag(self._widget , 182)
+	rich_ck:setTouchEnabled(true)
 
-	if ranktype == self.RankType.Rich then
+	if ranktype == 1 then
 		rich_ck:setBright(false)
 		win_ck:setBright(true)
 		cc.uiloader:seekNodeByTag(self._widget , 261):setColor(cc.c3b(255,255,255))
 		cc.uiloader:seekNodeByTag(self._widget , 263):setColor(cc.c3b(246,194,48))
-	elseif ranktype == self.RankType.Win then
+	elseif ranktype == 2 then
 		win_ck:setBright(false)
 		rich_ck:setBright(true)
 		cc.uiloader:seekNodeByTag(self._widget , 261):setColor(cc.c3b(246,194,48))

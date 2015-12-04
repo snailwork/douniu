@@ -145,6 +145,12 @@ function BankLayer:showBankLayer()
         self:hide()
     end)
 
+    bg:setOpacity(0)
+    self._widget:setScale(0.2)
+    transition.scaleTo(self._widget, {scale = 1, time = 0.4,easing = "BACKOUT",onComplete = function ( )
+        transition.fadeIn(bg,{time = 0.2})
+    end})
+
     self.Memory = {}
     self:initPanel()
     self:initEditBox()

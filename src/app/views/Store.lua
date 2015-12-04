@@ -12,6 +12,9 @@ function StoreLayer:ctor(data,callback)
 		:align(display.CENTER, display.cx, display.cy)
 	self.parts["store"] = store
 
+	store:setOpacity(10)
+	transition.fadeIn(store,{time = 0.4})
+
 	store:getChildByTag(202):setString(utils.numAbbrZh(USER.gold))
  	self.parts["list-item"] = store:getChildByTag(69)
     self.parts["list-item"]:setVisible(false)
@@ -93,17 +96,18 @@ function StoreLayer:init()
 			local item = panel_item:getChildByTag(index)
 			index = index + 1
 			item.data = v
-			-- if not info then
-			-- 	item:setVisible(false)
-			-- end
 			item:addTouchEventListener(handler(self,self.buy))
 
 			
 			item:getChildByTag(1):setString((tonumber(v.content["2"]) / 10000).."万")
 			item:getChildByTag(2):setString("1:"..math.floor(checkint(v.content["2"]) / checkint(v.cost)))
 			local icon = item:getChildByTag(3)
-			local i = tonumber(info.id) - 50
-			if tonumber(info.id) > 50 then
+			local i = tonumber(v.id) - 50
+			if i > 6 then
+				i = 6
+			end
+			dump(v.id)
+			if tonumber(v.id) > 50 then
 				icon:loadTexture("store/gold"..i..".png" , ccui.TextureResType.plistType )
 			end
 			item:getChildByTag(4):setString("￥"..v.cost)

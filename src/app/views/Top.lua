@@ -4,8 +4,8 @@ function Top:ctor(sp,prant)
     self.parts = {}
     self.parts["top"] = sp
     self.parts["prant"] = prant
-    local vals = {USER.level,USER.name,USER.gold}
-    for i=1,5 do
+    local vals = {"LV:"..USER.level,USER.name,USER.gold}
+    for i=1,7 do
         if i < 3 then
             sp:getChildByTag(i):setString(vals[i])
         else
@@ -14,8 +14,9 @@ function Top:ctor(sp,prant)
     end
 
     local head = utils.makeAvatar({icon = USER.icon,border = "#gold/border1.png"})
-        :pos(-570,54)
+        :pos(-570,-54)
         :addTo(sp)
+    self.parts["head"] = head
 
      self.handler = app:addEventListener("app.updatachip", function(event)
             vals = {USER.level,USER.name,USER.gold}
@@ -34,6 +35,9 @@ function Top:ctor(sp,prant)
             transition.fadeIn(sprite,{time = .2})
         end)
     end)
+
+    self.parts["top"] = sp:getChildByTag(5):getChildByTag(277)
+    self.parts["top"]:setVisible(false)
 end
 
 function Top:hide()
@@ -58,19 +62,29 @@ function Top:fun4(target, event )
     self.parts["prant"].parts["item"]["Store"] =require("app.views.Store").new(function (  )
             self.parts["prant"].parts["item"]["Store"] = nil
         end)
-    self.parts["prant"].parts["item"]["Store"]
 end
 
 --email
 function Top:fun5(target, event )
     if not self:btnScale(target, event) then return end
-    
+    self.parts["prant"].parts["item"]["Email"] = require("app.views.Email").new(function ()
+         self.parts["prant"].parts["item"]["Email"] = nil
+    end,self.parts["prant"])
 end
 
 --seting
 function Top:fun6(target, event )
     if not self:btnScale(target, event) then return end
-    
+    self.parts["prant"].parts["item"]["setting"] = require("app.views.Seting").new(function ()
+         self.parts["prant"].parts["item"]["setting"] = nil
+    end,self.parts["prant"])
+end
+
+function Top:fun7(target, event )
+    if not self:btnScale(target, event) then return end
+    self.parts["prant"].parts["item"]["UserInfo"] =require("app.views.UserInfo").new(USER,function (  )
+            self.parts["prant"].parts["item"]["UserInfo"] = nil
+        end)
 end
 
 

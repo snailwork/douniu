@@ -18,8 +18,15 @@ function UserInfo:ctor(data,callback)
     panel:align(display.CENTER, display.cx, display.cy)
 	self.parts["panel"] = panel
 
+
     local panel_bg = panel:getChildByTag(147)    --容器
     panel_bg:setContentSize(display.width,display.height)
+    
+    panel_bg:setOpacity(0)
+	panel:setScale(0.2)
+	transition.scaleTo(panel, {scale = 1, time = 0.4,easing = "BACKOUT",onComplete = function ( )
+		transition.fadeIn(panel_bg,{time = 0.2})
+	end})
     
 	panel:getChildByTag(501):addTouchEventListener(handler(self,self.close))     --关闭按钮
 	panel_bg:addTouchEventListener(function (target, event)
@@ -60,7 +67,7 @@ function UserInfo:ctor(data,callback)
 		:align(display.CENTER,189,395)
 		:addTo(self.parts["base-info"],-1)
     self.parts["head"] = head
-    head:setScale(1.2)
+    head:setScale(1.22)
 	self:getUserData()
 end
 

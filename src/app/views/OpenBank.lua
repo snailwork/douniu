@@ -13,6 +13,11 @@ function BankLayer:ctor(callback)
     local bg = cc.uiloader:seekNodeByTag(self._open_widget , 136)
     bg:setContentSize(display.width,display.height)
     
+    bg:setOpacity(0)
+    self._open_widget:setScale(0.2)
+    transition.scaleTo(self._open_widget, {scale = 1, time = 0.4,easing = "BACKOUT",onComplete = function ( )
+        transition.fadeIn(bg,{time = 0.2})
+    end})
 
     local frame_img = self._open_widget
     self.pass_edit = cc.ui.UIInput.new({

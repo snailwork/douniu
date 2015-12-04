@@ -54,6 +54,7 @@ function LoginManager.callback (data)
 			--     end},{"callback"},"(I)V")
 			-- end
 			
+
 		elseif data.svflag == 1004 then
 			--服务器更新中
 			showDialogTip("",data.data.msg,{"确定"},function ( flag )
@@ -112,7 +113,7 @@ end
 
 function LoginManager.getUserInfo()
 	utils.http(CONFIG.API_URL,
-    		{
+    		{	
 	    		method="Amember.load",
 	    		sesskey=USER.sessionKey,
 
@@ -123,7 +124,18 @@ function LoginManager.getUserInfo()
     				data = data.data
     				utils.__merge(USER,data.aUser)
     				utils.__merge(USER,data.aGame)
-    				
+
+    				CONFIG.canaward = data.canaward
+    				CONFIG.isaddf = data.isaddf
+    				CONFIG.isdayfrist = data.isdayfrist
+    				CONFIG.ismobile = data.ismobile
+    				CONFIG.lotcount = data.lotcount
+    				CONFIG.nowtime = data.nowtime
+    				CONFIG.tcost = data.tcost
+
+    				CONFIG.news = utils.getUserSetting(USER.mid.."CONFIG.news" , {})
+					LoginManager.loadNews()
+
     				--连接socket服务器
     				NetManager.connectToServer()
     				-- utils.callStaticMethod("MyGotye","gotypeLogin",{name=USER.mid..""},{"name"},"(S)V")
@@ -133,66 +145,6 @@ function LoginManager.getUserInfo()
 
     	end,"POST")
 end
-
-function LoginManager.getUserProp()
-	utils.http(CONFIG.API_URL,
-			{
-				method="Aprops.getPropsList",
-				sesskey=USER.sessionKey,
-				type = 1
-			}, function (data)
-					MY_PROPS = {}
-					if not data.data.arr then
-						return
-					end
-
-					for k , v in pairs(data.data.arr) do
-						local info = {}
-						info.pid = v[1]
-						info.pcate = v[2]
-						info.pframe = v[3]
-						info.status = v[4]
-						info.surplus_days = v[5]
-						info.num = 1
-						if info.pcate == 1 and info.pframe == 1 then
-							local flag = true
-							for i,val in ipairs(MY_PROPS) do
-								if val.pcate == 1 and val.pframe == 1 then
-									flag = false
-									val.num = checkint(val.num) + 1
-									val.surplus_days = val.num
-									break
-								end
-							end
-							if flag then
-								table.insert(MY_PROPS, info)
-							end
-						else
-							table.insert(MY_PROPS, info)
-						end
-					end
-					Loading.close()
-				end , "POST")
-end
-
-function LoginManager.getMaturePack()
-	utils.http(CONFIG.API_URL,
-			{
-				method="Alogin.getBrownPacks",
-				sesskey=USER.sessionKey,
-			},	function (data)
-				
-					MY_MATURE_PACK = {}
-
-					for k , v in pairs(data.data.arr) do
-						MY_MATURE_PACK[k] = (0 ~= v)
-					end
-				end
-
-			)
-
-end
-
 
 function LoginManager.parserRoomCfg()
 	local filename =  device.writablePath.."room.data"
@@ -250,6 +202,66 @@ function LoginManager.parserCommon()
 	end , filename)
 end
 
+function LoginManager.loadNews(_type)
+	_type = _type or 0
+	utils.http(CONFIG.API_URL,
+    	{
+	    	method = "Anotice.getMessage",	    
+	    	sesskey = USER.sessionKey,
+	    	isnew = 1,
+	    	type = _type,
+    	},function ( data )
 
+			if data.svflag ~= 1 then
+				return
+			end		
+			local flag = true,pot,msg,title,str
+			local arr = {}
+			for k , v in pairs(data.data.arr) do
+				str = v
+				flag = true
+				arr = string.split(str,"#")
+				LoginManager.makeNews({	id = arr[1].._type , 
+						time = arr[3] , 
+						status = 1 , 
+						type = arr[2] , 
+						tab = 2 , 
+                        title = arr[4] ,
+						msg = arr[5]})
+			end	
+    		local i = 1
+			while i <= #CONFIG.news do
+
+				local des_time = os.time() - CONFIG.news[i].time
+				if des_time > 24 * 60 * 60 then
+					table.remove(CONFIG.news, i)
+				else
+					i = i + 1
+				end
+			end
+			utils.setUserSetting(USER.mid.."NEWS" , CONFIG.news)
+    	end,"POST")
+
+end
+
+
+function LoginManager.makeNews(data)
+	local des_time = os.time() - data.time
+	if des_time > 30 * 24 * 60 * 60 then
+		return
+	end	
+	for i,v in ipairs(CONFIG.news) do
+		if v.id == data.id then
+			return
+		end
+	end
+	table.insert( CONFIG.news ,1, {	id = data.id , 
+							time = data.time, 
+							status = data.status or 1 , 
+							type = data.type or 1 , 
+							tab = data.tab or 2 , 
+							title = data.title , 
+							msg = data.msg } )
+end
 
 return LoginManager

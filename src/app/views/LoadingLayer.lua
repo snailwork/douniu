@@ -49,7 +49,6 @@ function LoadingLayer:ctor(data)
 
 		
 	end
-	dump(CONFIG.lType)
 	if CONFIG.lType == 3 then --第一次启动，走自动登陆，需要加载资源
 		self:Login()
 	elseif CONFIG.lType == 4 then --登陆，不用再加载资源

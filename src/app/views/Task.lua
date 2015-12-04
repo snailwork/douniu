@@ -15,6 +15,12 @@ function Task:ctor(callback)
 		self:hide()
 	end)
 
+    mask:setOpacity(0)
+	self.parts["layer"]:setScale(0.2)
+	transition.scaleTo(self.parts["layer"], {scale = 1, time = 0.4,easing = "BACKOUT",onComplete = function ( )
+		transition.fadeIn(mask,{time = 0.2})
+	end})
+
     self.parts["list-item"] = self.parts["layer"]:getChildByTag(19)
     self.parts["list-item"]:setVisible(false)
 
@@ -116,8 +122,6 @@ function Task:init()
 					hour = hour..":" .. os.date("%M",time)..":"..os.date("%S",time)
 				end
 				item:getChildByTag(38):setFontName("Helvetica-Bold")
-				item:getChildByTag(38):setColor(cc.c3b(83,59,96))--cc.c3b(65,170,18)
-				-- item:getChildByTag(38):setColor(cc.c3b(255,227,72))--cc.c3b(65,170,18)
 				item:getChildByTag(38):setString(hour)
 				table.insert(self.parts["time-items"],item)
 			else
