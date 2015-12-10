@@ -34,7 +34,7 @@ function ParseSocket:reCon ( msg )
 	self.neddHeart = false
     showDialogTip(msg,{"确定"},function ( flag )
 		NetManager.close()
-		SceneManager.switch("LoginScene")
+		display.replaceScene(require("app.scenes.LoginScene").new(self.data))
 	end)
 end
 
@@ -44,7 +44,6 @@ function ParseSocket:init(socketEvent)
     -- self.tid = self:heart()
 
 	socketEvent:addEventListener("closed", function(event)
-		dump(1111)
 		self.neddHeart = false
 		if not USER.relogin then
 			self:reCon()
@@ -54,7 +53,6 @@ function ParseSocket:init(socketEvent)
 		self.neddHeart = false
 	end)
 	socketEvent:addEventListener("failure", function(event)
-		dump(222222)
 		self:reCon()
 	end)
 			
@@ -412,7 +410,7 @@ function ParseSocket:fun1036(packet,cmd)
 end 
 
 --任务数据
-function ParseSocket:fun1055(packet,cmd)
+function ParseSocket:fun1201(packet,cmd)
 	local data = {}
 	local num = packet:readInt()
 	for i=1,num do
@@ -427,11 +425,11 @@ function ParseSocket:fun1055(packet,cmd)
 			CONFIG.task[data[i].pcate..data[i].pframe].comNum = data[i].comNum --完成的次数，时间任务就是已经完成的时间（已经过了的时间）
 		end
 	end
-	
+	dump(data)
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
 end
 --任务完成推送
-function ParseSocket:fun1053(packet,cmd)
+function ParseSocket:fun1202(packet,cmd)
 	local data = {
 		pcate = packet:readInt(),
 		pframe = packet:readInt(),
@@ -444,9 +442,47 @@ function ParseSocket:fun1053(packet,cmd)
 	end
 	
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
-	-- if data.status > 0 then
-	-- 	utils.playSound("mis-com-tip")
-	-- end
+	if data.status > 0 then
+		utils.playSound("mis-com-tip")
+	end
+end
+
+--广播系统消息
+function ParseSocket:fun2002(packet,cmd)
+	--type 0，房间聊天 1，喇叭 2，系统消息
+	local data = {	
+		_type = packet:readInt(),
+		mid = packet:readInt(),
+		name = packet:readString(),
+		msg = packet:readString(),
+	}
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+
+--聊天
+function ParseSocket:fun2001(packet,cmd)
+	local data = {
+		err = packet:readInt(), --0，成功 1，失败
+		time = packet:readInt(), --还有多少秒可以发消息
+	}
+	
+	if  data.time > 0 then
+		showAutoTip("您被禁言了",{"确定"})
+	end
+end
+
+--表情
+function ParseSocket:fun1032(packet,cmd)
+	local data = {
+		mid = packet:readInt(),
+		pcate =  packet:readInt(),
+		pframe =  packet:readInt(),
+	}
+	
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
 end
 
 return ParseSocket

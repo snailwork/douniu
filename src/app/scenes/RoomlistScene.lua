@@ -64,6 +64,7 @@ end
 --close
 function RoomlistScene:fun2(target, event )
     if not self:btnScale(target, event) then return end
+    display.replaceScene(require("app.scenes.HallScene").new())
 end
 
 function RoomlistScene:onEnter()

@@ -1,4 +1,5 @@
 local LoginManager = class("LoginManager")
+local ParseXml = require("app.tools.ParseXml")
 
 
 function LoginManager:ctor()

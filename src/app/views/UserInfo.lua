@@ -30,11 +30,6 @@ function UserInfo:ctor(data,callback)
     
 	panel:getChildByTag(501):addTouchEventListener(handler(self,self.close))     --关闭按钮
 	panel_bg:addTouchEventListener(function (target, event)
-        if event == 0 then
-            target:setScale(0.9)
-        elseif event == 3 or event == 2 then
-            target:setScale(1)
-        end
         if event ~= ccui.TouchEventType.ended then
             return
         end
@@ -43,23 +38,25 @@ function UserInfo:ctor(data,callback)
     end)
 
 	self.parts["base-info"] = panel:getChildByTag(444)     --基本信息
-	self.parts["list"] = self.parts["base-info"]:getChildByTag(487)
+	self.parts["list"] = self.parts["base-info"]:getChildByTag(598):getChildByTag(487)
 	
-	self.parts["list-item"] = self.parts["base-info"]:getChildByTag(1123)     --道具信息
+	self.parts["list-item"] = self.parts["base-info"]:getChildByTag(598):getChildByTag(1123)     --道具信息
 	self.parts["list-item"]:setVisible(false)
 	
 	
 	self.parts["base-info"]:getChildByTag(241):setVisible(false)
 	if self:isSelf() then
+		self.parts["base-info"]:getChildByTag(598):setVisible(false)
 		self.parts["list"]:setVisible(false)
 		self.parts["base-info"]:getChildByTag(243):addTouchEventListener(handler(self,self.setName))   --修改信息
 		self.parts["base-info"]:getChildByTag(240):addTouchEventListener(handler(self,self.setSex))   --修改性别
-		self.parts["base-info"]:getChildByTag(494):setVisible(false)
 	else
 		
 		self.parts["base-info"]:getChildByTag(242):setVisible(false)
 		if checkint(USER.seatid) > 0 then           --在游戏房间里看别人的信息
 			self:initProps()
+		else
+			self.parts["base-info"]:getChildByTag(598):setVisible(false)
 		end
 	end
 
@@ -234,12 +231,17 @@ end
 
 --是别人的时候生成互动道具
 function UserInfo:initProps( )
-	self.parts["other-bg"]:setVisible(true)
+	
+	local model = self.parts["list-item"]
+
 	local propsImg = {"kiss","flower","egg","dog"}
 	local vals = {6,8,9,10}
 	for i,v in ipairs(propsImg) do
-		local btn = self.parts["other-bg"]:getChildByTag(i)
-		btn:addTouchEventListener(function (target,event )
+		dump(v)
+		local item = model:clone()
+		self.parts["list"]:pushBackCustomItem(item)
+		item:setVisible(true)
+		item:addTouchEventListener(function (target,event )
 			if event == 0 then
 		        target:setScale(0.9)
 		    elseif event == 3 or event == 2 then
@@ -259,12 +261,10 @@ function UserInfo:initProps( )
 		        mid = self.data.mid
 		    }
 		    SendCMD:useProps(data)
-		    -- if checkint(USER.status) ~= 2 and self.parts["USER"]:hadCard() then
-		        self:hide()
-		    -- end
+	        self:hide()
 		end)
 		
-      	btn:getChildByTag(1):loadTexture("interaction/"..v..".png",1)
+      	item:getChildByTag(1):loadTexture("interaction/"..v..".png",1)
 	end
 end
 
@@ -286,6 +286,7 @@ function UserInfo:getUserData( )
 	    		
     	},function ( data )
     		if data.svflag == 1 and data.data then
+    			dump(data.data)
 	    	    self.data.maxhs = data.data.arr[1]
 	    		self.data.maxwin = data.data.arr[2]
 	    		self.data.maxchip = data.data.arr[3] 
@@ -356,20 +357,30 @@ function UserInfo:updataBasicInfo()
     data[9] = "ID: " .. self.data.mid
     data[10] = "LV: " .. self.data.level
 
-    dump(data)
     for i=1,10  do
     	if data[i] ~= nil then
     		self.parts["base-info"]:getChildByTag(i):setString(data[i].."")
     	end
     end
-    dump(self.data.sex)
 	if checkint(self.data.sex) == 1 then      --0男 1女 2保密
     	self.parts["base-info"]:getChildByTag(502):setVisible(true)
-    	self.parts["base-info"]:getChildByTag(502):loadTexture("useinfo/boy.png", 1)
+    	self.parts["base-info"]:getChildByTag(502):loadTexture("userinfo/boy.png", 1)
     -- elseif checkint(self.data.sex) == 2 then
     	-- self.parts["base-info"]:getChildByTag(502):setVisible(false)
     end
-  
+
+  	local j = 1
+  	for i,v in ipairs(self.data.maxhs) do
+    	if #(v.."") == 2 then
+    		Card.new({batchnode = self.parts["base-info"]:getChildByTag(590):getChildByTag(i),val = v})
+    		self.parts["base-info"]:getChildByTag(590):getChildByTag(i):setScale(0.55)
+    		j = j + 1
+    	end
+    end
+   	for i =j,5 do
+   		Card.new({batchnode = self.parts["base-info"]:getChildByTag(590):getChildByTag(i)})
+   		self.parts["base-info"]:getChildByTag(590):getChildByTag(i):setScale(0.55)
+   	end
 end
 
 function UserInfo:isSelf()

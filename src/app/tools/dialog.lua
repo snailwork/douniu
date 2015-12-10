@@ -80,8 +80,7 @@ end
 function Dialog:hide(isok)
 	isok = isok or false
 	self._widget:removeFromParent()
-	if self["callback"] ~= nil then
-
+	if self.callback then
 		self.callback(isok)
 	end
 end

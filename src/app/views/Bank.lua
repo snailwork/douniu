@@ -308,7 +308,7 @@ function BankLayer:giveChip(chip , mid , pass)
                     showAutoTip("没有找到对方的ID")
                     self:setEditBox(true)
                 else
-                        createMessageBox("提示","你确定要转账"..chip.."筹码，给玩家"..data.data.arr[1].."吗？",{"取消","确定"} , function (isok)
+                        createMessageBox("你确定要转账"..chip.."筹码，给玩家"..data.data.arr[1].."吗？",{"取消","确定"} , function (isok)
                         self:setEditBox(true)
                         if isok then
                             Loading.create()

@@ -67,17 +67,17 @@ end
 --email
 function Top:fun5(target, event )
     if not self:btnScale(target, event) then return end
-    self.parts["prant"].parts["item"]["Email"] = require("app.views.Email").new(function ()
+    self.parts["prant"].parts["item"]["Email"] = require("app.views.Email").new(self.parts["prant"],function ()
          self.parts["prant"].parts["item"]["Email"] = nil
-    end,self.parts["prant"])
+    end)
 end
 
 --seting
 function Top:fun6(target, event )
     if not self:btnScale(target, event) then return end
-    self.parts["prant"].parts["item"]["setting"] = require("app.views.Seting").new(function ()
+    self.parts["prant"].parts["item"]["setting"] = require("app.views.Setting").new(self.parts["prant"],function ()
          self.parts["prant"].parts["item"]["setting"] = nil
-    end,self.parts["prant"])
+    end)
 end
 
 function Top:fun7(target, event )

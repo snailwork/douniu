@@ -7,36 +7,78 @@ end)
 function RankingLayer:ctor( callback ,prant)
 	self:addTo(display.getRunningScene(),100)
 	self.parts={}
+	self.RankType = {}
+	self.RANK = {}
 	self.parts["prant"] = prant
+
 	Loading.create()
 	self.callback = callback
 	self:setNodeEventEnabled(true)
-	self._widget = cc.uiloader:load("ranking.csb"):addTo(self)
+	self.parts["widget"] = cc.uiloader:load("ranking.csb"):addTo(self)
 		:align(display.CENTER, display.cx, display.cy)
 
-	local bg = cc.uiloader:seekNodeByTag(self._widget , 82)
+	self.parts["panel"] = self.parts["widget"]:getChildByTag(83)
+
+
+	local bg = self.parts["widget"]:getChildByTag(82)
 	bg:setContentSize(display.width,display.height)
 
 	bg:setOpacity(0)
-	self._widget:setScale(0.2)
-	transition.scaleTo(self._widget, {scale = 1, time = 0.4,easing = "BACKOUT",onComplete = function ( )
+	self.parts["widget"]:setScale(0.2)
+	transition.scaleTo(self.parts["widget"], {scale = 1, time = 0.4,easing = "BACKOUT",onComplete = function ( )
 		transition.fadeIn(bg,{time = 0.2})
 	end})
 
-	self.RANK = {}
-	self:init()
-	self.RankType = {}
-	self:setRankType(1)
-	cc.uiloader:seekNodeByTag(self._widget , 1833):setVisible(false)
+	self.parts["panel"]:getChildByTag(85):addTouchEventListener(function ( s , t )
+		if t == ccui.TouchEventType.ended then
+			utils.playSound("click")
+			self:hide()
+		end
+	end)
 
+	bg:addTouchEventListener(function ( s , t )
+		if t == ccui.TouchEventType.ended then
+			utils.playSound("click")
+			self:hide()
+		end
+	end)
+
+	function selectedEvent(sender , eventType )
+		if eventType ~= 2 then return end
+		utils.playSound("click")
+		self:setRankType(checkint(sender:getTag()) == 182 and 1 or 2)
+	end
+	
+	self.parts["win_ck"] = self.parts["panel"]:getChildByTag(184)
+	self.parts["rich_ck"] = self.parts["panel"]:getChildByTag(182)
+	self.parts["win_ck"]:setTouchEnabled(true)
+	self.parts["rich_ck"]:setTouchEnabled(true)
+	self.parts["win_ck"]:setEnabled(true)
+	self.parts["rich_ck"]:setEnabled(true)
+	
+	self.parts["win_ck"].label = cc.uiloader:seekNodeByTag(self.parts["widget"] , 261)
+	self.parts["rich_ck"].label = cc.uiloader:seekNodeByTag(self.parts["widget"] , 263)
+
+	self.parts["win_ck"].label:setFontName("Helvetica-Bold")
+	self.parts["rich_ck"].label:setFontName("Helvetica-Bold")
+
+
+	self.parts["win_ck"]:addTouchEventListener(selectedEvent)
+	self.parts["rich_ck"]:addTouchEventListener(selectedEvent)
+	
 	self.handler = app:addEventListener("app.ranking_reload", function(event)
 		local data = event.data.data
 		self.RANK[data.type] = data.arr
 		self:reload(data.type)
 
 	end)
-	cc.uiloader:seekNodeByTag(self._widget , 263):setFontName("Helvetica-Bold")
-	cc.uiloader:seekNodeByTag(self._widget , 261):setFontName("Helvetica-Bold")
+	
+	self.parts["model"] = self.parts["panel"]:getChildByTag(1833)
+	self.parts["listview"] = self.parts["panel"]:getChildByTag(1036)
+	self.parts["model"]:setVisible(false)
+	
+
+	self:setRankType(1)
 end
 
 function RankingLayer:hide()
@@ -48,54 +90,33 @@ function RankingLayer:hide()
 	end
 	self.perHandler = nil
 	self:removeFromParent()
+	if self.handler then
+		app:removeEventListener(self.handler)
+	end
+	self.handler = nil
 end
 
 function RankingLayer:onExit()
-	app:removeEventListener(self.handler)
-
-end
-
-function RankingLayer:init()
-
-	cc.uiloader:seekNodeByTag(self._widget , 85):addTouchEventListener(function ( s , t )
-		if t == ccui.TouchEventType.ended then
-			utils.playSound("click")
-			self:hide()
-		end
-	end)
-
-	cc.uiloader:seekNodeByTag(self._widget , 82):addTouchEventListener(function ( s , t )
-		if t == ccui.TouchEventType.ended then
-			utils.playSound("click")
-			self:hide()
-		end
-	end)
-
-	function selectedEvent(sender , eventType )
-		if eventType ~= 2 then return end
-		utils.playSound("click")
-		dump(checkint(sender:getTag()))
-		dump(checkint(sender:getTag()) == 182 and 1 or 2)
-		self:setRankType(checkint(sender:getTag()) == 182 and 1 or 2)
+	dump("onExit")
+	if self.handler then
+		app:removeEventListener(self.handler)
 	end
-
-	self._widget:getChildByTag(83):getChildByTag(184):addTouchEventListener(selectedEvent)
-	self._widget:getChildByTag(83):getChildByTag(182):addTouchEventListener(selectedEvent)
-
+	self.handler = nil
 
 end
 
 
 function RankingLayer:reload(ranktype)
-	local listview = cc.uiloader:seekNodeByTag(self._widget , 1036)
+	local listview = self.parts["listview"]
 	listview:removeAllChildren()
 	if self.RANK[ranktype] == nil or #self.RANK[ranktype] == 0  then
 		local label = cc.ui.UILabel.new({text = "没有任何记录~", size = 28, color = display.COLOR_WHITE})
 			:pos(469,257)
-			:addTo(cc.uiloader:seekNodeByTag(self._widget , 83))
+			:addTo(self.parts["panel"])
 		return 
 	end
-	local mode = cc.uiloader:seekNodeByTag(self._widget , 1833)
+	local mode = self.parts["model"]
+
 	for k , v in pairs(self.RANK[ranktype]) do
 		local item = mode:clone()
 		item.data = v
@@ -239,21 +260,21 @@ end
 
 function RankingLayer:setRankType(ranktype)
 	dump(ranktype)
-	local win_ck = cc.uiloader:seekNodeByTag(self._widget , 184)
-	
-	local rich_ck = cc.uiloader:seekNodeByTag(self._widget , 182)
-	rich_ck:setTouchEnabled(true)
+	local win_ck = self.parts["win_ck"]
+	local rich_ck = self.parts["rich_ck"]
 
 	if ranktype == 1 then
 		rich_ck:setBright(false)
 		win_ck:setBright(true)
-		cc.uiloader:seekNodeByTag(self._widget , 261):setColor(cc.c3b(255,255,255))
-		cc.uiloader:seekNodeByTag(self._widget , 263):setColor(cc.c3b(246,194,48))
+
+		self.parts["rich_ck"].label:setColor(cc.c3b(255,255,255))
+		self.parts["win_ck"].label:setColor(cc.c3b(246,194,48))
 	elseif ranktype == 2 then
 		win_ck:setBright(false)
 		rich_ck:setBright(true)
-		cc.uiloader:seekNodeByTag(self._widget , 261):setColor(cc.c3b(246,194,48))
-		cc.uiloader:seekNodeByTag(self._widget , 263):setColor(cc.c3b(255,255,255))
+		
+		self.parts["win_ck"].label:setColor(cc.c3b(255,255,255))
+		self.parts["rich_ck"].label:setColor(cc.c3b(246,194,48))
 	end
 	
 	if self.RANK[ranktype] ~= nil then

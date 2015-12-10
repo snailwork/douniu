@@ -101,7 +101,7 @@ function AppStore.initStore()
         elseif  transaction.state == "restored" then
         elseif transaction.state == "failed" then
             Loading.close()
-            showDialogTip("提示" , "支付失败，请重试" , {"确定"})
+            showDialogTip("支付失败，请重试" , {"确定"})
             app:dispatchEvent({name = "updateBroke"})
         else
             --取消支付会触发
@@ -148,11 +148,11 @@ function AppStore.buyItem( good)
         Store.loadProducts({proid}, function ( data )
             -- dump(data)
             if data.errorCode then
-                showDialogTip("提示" , data.errorString ,{"确定"})
+                showDialogTip(data.errorString ,{"确定"})
                 Loading.close()
             elseif data['invalidProductsId'] then
                 transition.removeAction(tid)
-                showDialogTip("提示" , "该商品当前无法购买" ,{"确定"})
+                showDialogTip("该商品当前无法购买" ,{"确定"})
                 Loading.close()
                 return
             end

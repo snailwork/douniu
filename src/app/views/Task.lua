@@ -85,9 +85,9 @@ function Task:init()
     		-- end
     	end
     end
-    if not vals["110"] then
-    	vals["111"] = lastTime
-    end
+    -- if not vals["110"] then
+    -- 	vals["111"] = lastTime
+    -- end
 	vals = table.values(vals)
 	--完成的排前面
 	table.sort(vals,function(a,b)

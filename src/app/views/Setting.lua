@@ -3,7 +3,7 @@ local SettingLayer = class("SettingLayer", function()
     return display.newLayer("SettingLayer")
 end)
 
-function SettingLayer:ctor(callback,hall)
+function SettingLayer:ctor(hall,callback)
 	self:addTo(display.getRunningScene(),100)
 	self.callback = callback
 	self.hall = hall
@@ -15,10 +15,12 @@ function SettingLayer:ctor(callback,hall)
 
 	local list = cc.uiloader:seekNodeByTag(self._widget , 1112)
 	local vals = {"music_enabled","sound_enabled","vibrate_enabled"}
+
 	for i=1,8 do
-		if i > 1 and i < 6 then
-			cc.uiloader:seekNodeByTag(list , i):addEventListener(handler(self,self["fun"..i]))
-			cc.uiloader:seekNodeByTag(list , i):setSelected(utils.getUserSetting(vals[i-1],false))
+		if i > 1 and i < 5 then
+			local btn = cc.uiloader:seekNodeByTag(list , i)
+			btn:addEventListener(handler(self,self["fun"..i]))
+			btn:setSelected(utils.getUserSetting(vals[i-1],false))
 		else
 			cc.uiloader:seekNodeByTag(list , i):addTouchEventListener(handler(self,self["fun"..i]))
 		end

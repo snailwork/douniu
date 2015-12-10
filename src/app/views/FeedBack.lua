@@ -9,7 +9,7 @@ function FeedBackLayer:ctor(callback,about)
 	if about then
 		self._widget = cc.uiloader:load("about.csb"):addTo(self)
 		local text = cc.uiloader:seekNodeByTag(self._widget , 7023)
-		text:setContentSize(810,1700)
+		-- text:setContentSize(810,1700)
 		text:setString(string.format(text:getString(),CONFIG.appversion))
 	else
 		self._widget = cc.uiloader:load("feedback.csb"):addTo(self)
