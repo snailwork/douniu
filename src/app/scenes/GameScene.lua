@@ -23,7 +23,6 @@ function GameScene:ctor(data)
     require("app.views.LoadingLayer").new():addTo(self,919)
 
     local layer = cc.uiloader:load("room.csb"):addTo(self)
-    -- local room = cc.CSLoader:createNode("room.csb"):addTo(self)
     	:align(display.CENTER, display.cx, display.cy)
     self.parts  ={}
     self.parts["layer"] = layer
@@ -38,15 +37,11 @@ function GameScene:ctor(data)
     self.parts["clock"] = Clock.new(layer:getChildByTag(116))
     self.parts["menu"] = Menu.new(self,layer:getChildByTag(302)) 
     self.parts["action"] = Action.new(self,layer:getChildByTag(268)) 
-    -- layer:getChildByTag(302):setTouchEnabled(false)
 
     self.parts["chat-layer"] =  Chat.new(self)
     self.parts["chat-layer"].parts["chat"]:zorder(999)
     
-    -- self.parts["inputPanel"] = layer:getChildByTag(239)
-    -- self.parts["inputPanel"]:zorder(1000)
-    -- self.parts["inputPanel"]:setVisible(false)
-    -- self.parts["input"] = self.parts["inputPanel"]:getChildByTag(240)
+   
 
     local seat
     for i=1,5 do
@@ -72,11 +67,11 @@ function GameScene:ctor(data)
 	self.parts["event"] = GameEvent.new(self)
     self.parts["sysMsg"] = SysMsg.new(layer:getChildByTag(385))
     SendCMD:quickInRoom(1000,data.typeId)
-    -- self.parts["delay-http"] = performWithDelay(self,function ( ... )
-    --     showDialogTip("网络连接出错，请检查wifi是否连接正常" , {"确定"} , function (isOK)
-    --             display.replaceScene(require("app.scenes.LoginScene").new(self.data))
-    --         end)
-    -- end,5)
+    self.parts["delay-http"] = performWithDelay(self,function ( ... )
+        showDialogTip("网络连接出错，请检查wifi是否连接正常" , {"确定"} , function (isOK)
+                display.replaceScene(require("app.scenes.LoginScene").new(self.data))
+            end)
+    end,5)
 
     if device.platform == "android" then
         self:setKeypadEnabled(true)

@@ -121,6 +121,8 @@ function GameEvent:fun1101(data)
     seats[data.seatid] = seat3
 	seat3:sit(USER)
 	dump(seat3.model)
+	
+	self.room:stopAction(self.room.parts["delay-http"])
 end
 
 --游戏开始

@@ -103,8 +103,7 @@ function Activity:init()
                     end,"POST")
                 elseif data == "quickstart" then
                 	scheduler.performWithDelayGlobal(function ( ... )
-	                	CONFIG.LOADING_TYPE = LOADING_TAG.Load_Fast_Enter_Room
-	    				SceneManager.switch("GameScene")
+                		display.replaceScene(require("app.scenes.GameScene").new())
 	    			end,0.3)
 	    		end
 	    	end }, {"url","callback"}, "(SI)Z")
