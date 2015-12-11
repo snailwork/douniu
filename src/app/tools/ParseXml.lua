@@ -13,6 +13,9 @@ function ParseXml.parseRoomInfo(roomdata)
 	end
 end
 
+	
+	
+
 --任务
 function ParseXml.parseCommon(commom)
 	-- dump(commom.content,"",5)
@@ -116,6 +119,13 @@ function ParseXml.parseCommon(commom)
 	-- CONFIG.WCHAT_PAY =  config[26]["@attributes"].count == "1" and true or false
 	-- CONFIG.openActivity =  config[27]["@attributes"].count == "1" and true or false
 	-- CONFIG.getUserInfo =  config[28]["@attributes"].count == "1" and true or false
+	CONFIG.activity = {}
+	for k,v in pairs(commom.content.mobileac.item) do
+ 		local data = v["@attributes"]
+ 		if checkint(data.isopen) == 1 then
+ 			table.insert(CONFIG.activity,data)
+ 		end
+ 	end
 end
 
 function ParseXml.parseProp(prop)

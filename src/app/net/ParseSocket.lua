@@ -444,6 +444,9 @@ function ParseSocket:fun1202(packet,cmd)
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
 	if data.status > 0 then
 		utils.playSound("mis-com-tip")
+		if data.pcate == 11 then
+			app:dispatchEvent({name = "app.updateTask",{status = 0}})
+		end
 	end
 end
 

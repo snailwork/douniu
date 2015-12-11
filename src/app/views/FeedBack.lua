@@ -3,19 +3,24 @@ local FeedBackLayer = class("FeedBackLayer", function()
     return display.newLayer("FeedBackLayer")
 end)
 
-function FeedBackLayer:ctor(callback,about)
+function FeedBackLayer:ctor(callback,data)
 	self:addTo(display.getRunningScene(),100)
 	self.callback = callback
-	if about then
+	if data.about then
 		self._widget = cc.uiloader:load("about.csb"):addTo(self)
-		local text = cc.uiloader:seekNodeByTag(self._widget , 7023)
+		local text = cc.uiloader:seekNodeByTag(self._widget , 232)
 		-- text:setContentSize(810,1700)
 		text:setString(string.format(text:getString(),CONFIG.appversion))
+	elseif data.more then
+		self._widget = cc.uiloader:load("more.csb"):addTo(self)
+		cc.uiloader:seekNodeByTag(self._widget , 87):addTouchEventListener(function ( target , event)
+			device.openURL(CONFIG.UPDATA_URL)
+		end)
 	else
 		self._widget = cc.uiloader:load("feedback.csb"):addTo(self)
 	end
+	self._widget:align(display.CENTER, display.cx, display.cy)
 	
-
 	function close_cb( s , t)
 		if t ~= ccui.TouchEventType.ended then
 			return
@@ -23,9 +28,17 @@ function FeedBackLayer:ctor(callback,about)
 		utils.playSound("click")
 		self:hide()
 	end
-	cc.uiloader:seekNodeByTag(self._widget , 1000):setTouchEnabled(true)
-	cc.uiloader:seekNodeByTag(self._widget , 4296):addTouchEventListener(close_cb)
-	local bg = cc.uiloader:seekNodeByTag(self._widget , 66)
+	cc.uiloader:seekNodeByTag(self._widget , 471):setTouchEnabled(true)
+	cc.uiloader:seekNodeByTag(self._widget , 235):addTouchEventListener(function ( target , event)
+		if event == 0 then
+	        target:setScale(0.9)
+	    elseif event == 3 or event == 2 then
+	        target:setScale(1)
+	    end
+	    if event ~= 2 then return false end
+		close_cb( target , event)
+	end)
+	local bg = cc.uiloader:seekNodeByTag(self._widget , 136)
 	bg:addTouchEventListener(close_cb)
 	bg:setContentSize(display.width,display.height)
 	

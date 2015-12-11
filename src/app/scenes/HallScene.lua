@@ -179,6 +179,7 @@ end
 --more
 function HallScene:fun5(target, event )
     if not self:btnScale(target, event) then return end
+    self:showFeedback({more =  true})
 end
 
 --task
@@ -206,6 +207,9 @@ end
 --activity
 function HallScene:fun8(target, event )
     if not self:btnScale(target, event) then return end
+    self.parts["item"]["activity"] = require("app.views.Activity").new(function ( ... )
+            self.parts["item"]["activity"] = nil
+        end,self)
 end
 
 --rank
@@ -216,10 +220,10 @@ function HallScene:fun9(target, event )
         end,self)
 end
 
-function HallScene:showFeedback(about)
+function HallScene:showFeedback(data)
     self.parts["item"]["feedback"] = require("app.views.FeedBack").new(function ()
         self.parts["item"]["feedback"] = nil
-    end,about)
+    end,data)
 end
 
 function HallScene:onExit()

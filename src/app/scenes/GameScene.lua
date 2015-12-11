@@ -211,7 +211,6 @@ function GameScene:setDealer(seatid)
          end,1)
     end
     
-    dump(seatid)
 end
 
 function GameScene:clear()
@@ -226,6 +225,8 @@ function GameScene:onExit()
         self:setKeypadEnabled(false)
         self:removeNodeEventListener(cc.KEYPAD_EVENT)
     end
+    app:removeEventListener(self.parts["menu"].parts["handler"])
+    
     utils.stopMusic()
 end
 

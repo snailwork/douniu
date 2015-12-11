@@ -114,7 +114,7 @@ function Email:updataAllChats()
 		local time_label = cc.uiloader:seekNodeByTag(item , 481)
 		local title_label = cc.uiloader:seekNodeByTag(item , 212)
 		-- local news_flag = cc.uiloader:seekNodeByTag(item , 7519)
-		local seek_btn = cc.uiloader:seekNodeByTag(item , 349)
+		-- local seek_btn = cc.uiloader:seekNodeByTag(item , 349)
 
 		title_label:setString(v.title)
 		if v.status == 0 then

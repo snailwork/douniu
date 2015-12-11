@@ -71,7 +71,7 @@ end
 --关于
 function SettingLayer:fun7( target,event )
 	if event ~= ccui.TouchEventType.ended then return end
-	self.hall:showFeedback(true)
+	self.hall:showFeedback({about =  true})
 end
 --反馈
 function SettingLayer:fun5( target,event )

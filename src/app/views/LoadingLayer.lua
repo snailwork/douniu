@@ -66,9 +66,7 @@ end
 
 function LoadingLayer:Login(a,b )
 	
-	dump(self.loadingProgress)
 	self.handler = app:addEventListener("app.login", function(event)
-		dump(self.loadingProgress)
 		app:removeEventListener(self.handler)
 		if event.data.err ~= 0 then
 
@@ -125,10 +123,6 @@ end
 
 
 function LoadingLayer:onExit()
-	dump("onExit")
-	dump("onExit")
-	dump("onExit")
-	dump("onExit")
 	app:removeEventListener(self.handler)
 	app:removeEventListener(self.http_handler)
 	self:stopAllActions()

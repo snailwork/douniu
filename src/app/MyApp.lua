@@ -51,6 +51,9 @@ CONFIG = {
         "人生就像赌博，洗牌是上天，但是玩牌的是自己",
         "应该懂得什么时候去放弃",
         },
+    UPDATA_URL = "http://www.baidu.com",
+    -- UPDATA_URL = "http://app100642929-1.qzoneapp.com/poker/api/mobile/channel/channel.html",
+    SHARE_URL = "http://app.qq.com/#id=detail&appid=1101746538",
 }
 USER = {}
 CMD = {

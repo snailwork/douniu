@@ -110,7 +110,7 @@ function Task:init()
 		local btn = item:getChildByTag(5)
 		btn:setVisible(false)
 		if v.subtype == 11 then
-
+			dump(v)
 			time = v.needNum - v.comNum --还需要多少秒
 			item.time = time
 			
@@ -155,6 +155,7 @@ function Task:init()
 				if data.svflag == 1 then
 					if v.subtype == 11 then
 						showAutoTip("恭喜您，计时礼包随机获得："..data.data.arr[4])
+						app:dispatchEvent({name = "app.updateTask",{status = 0}})
 					else
 						showAutoTip("恭喜您完成任务获得"..data.data.arr[4] .. "筹码，更多奖励等你来拿！")
 					end
@@ -176,7 +177,9 @@ function Task:init()
 		-- 	item:getChildByTag(1):loadTexture("task/" .. v.url .. ".png",1)
 		-- end
 		self.parts["list"]:pushBackCustomItem(item)
-		self:startUpdateTime()
+		if checkint(USER.seatid) > 0 then
+			self:startUpdateTime()
+		end
 	end
 end
 
