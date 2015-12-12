@@ -139,9 +139,7 @@ function ParseSocket:fun1002(packet ,cmd)
 	local data = {}
 	local status = packet:readInt()
 	local num = packet:readInt()
-	dump(num)
 	for i=1,num do
-		dump(i)
 		data[i] = {	
 			seatid = packet:readInt(),
 

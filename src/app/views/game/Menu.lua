@@ -156,8 +156,6 @@ end
 function Menu:fun1(target, event )
     if not self:btnScale(target, event) then return end
     self.parts["menuLayer"]:setVisible(true)
-    self.parts["game"].gameStatus = 1
-    dump(self.parts["game"].gameStatus)
     if self.parts["game"].gameStatus == 1 then
         self.parts["menuLayer"]:getChildByTag(1):getChildByTag(331):loadTexture("menu/back-dis.png",1)
         self.parts["menuLayer"]:getChildByTag(2):getChildByTag(333):loadTexture("menu/change-dis.png",1)
