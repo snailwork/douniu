@@ -19,6 +19,7 @@ Store = require("framework.cc.sdk.Store")
 
 Chip = require("app.views.game.Chip")
 Card = require("app.views.game.Card")
+Card100 = require("app.views.game.Card100")
 
 -- lType = {
 -- 		1,    -- 默认如果第一次登录游戏
@@ -36,7 +37,7 @@ CONFIG = {
 	gp = 101,
 	lType = 1,
 	channel = 2000,
-    niuType = {"牛一","牛二","牛三","牛四","牛五","牛六","牛七","牛八","牛九","牛牛","","炸弹","五花牛","五小牛"},
+    niuType = {"牛一","牛二","牛三","牛四","牛五","牛六","牛七","牛八","牛九","牛牛","白皮牛","炸弹","五花牛","五小牛"},
     Ranking = {1,2},
     loadingTips ={
         "不要惧怕任何人，同样不要小视任何人",
@@ -54,6 +55,7 @@ CONFIG = {
     UPDATA_URL = "http://www.baidu.com",
     -- UPDATA_URL = "http://app100642929-1.qzoneapp.com/poker/api/mobile/channel/channel.html",
     SHARE_URL = "http://app.qq.com/#id=detail&appid=1101746538",
+    upDealer = {}
 }
 USER = {}
 CMD = {
@@ -86,6 +88,8 @@ CMD = {
     --亮牌
     SHOW_CARD = 1107,
     --游戏结束
+    GAME_CALCULATE = 1111,
+    --游戏结算
     GAME_OVER = 1108,
     --重连的房间信息
     RE_LOGIN_ROOMINOF = 1109,
@@ -119,6 +123,38 @@ CMD = {
     CLIENT_REQUEST_CHAT_MESSAGE               = 2001,
     --聊天消息 广播消息
     CHAT_MSG                = 2002,
+
+    --进百人场
+    IN_ROOM100                    = 1001,
+    --亮牌
+    SHOW_CARDS                = 1041,
+    --广播谁上庄
+    UP_DEALER                = 1006,
+    --广播谁下庄
+    DOWN_DEALER                = 1007,
+
+    --请求上庄
+    REQ_UP_DEALER                = 1053,
+    --请求下庄
+    REQ_DOWN_DEALER                = 1054,
+
+    --4个位置的下注额度
+    CHIP_LIMIT      =   1055,
+    --开始下注
+    CHIP_BEGIN      =   1056,
+    --下注
+    CHIP_IN    = 1057,
+    --通知庄丢股子dice
+    DEALER_DICE    = 1058,
+    --输赢历史
+    GAME_HIS    = 1059,
+    --抢庄列表
+    DEALER_LIST    = 1060,
+    --结算
+    GAME100_CALCULATE    = 1061,
+    --玩家请求丢股子
+    PLAYER_DICE    = 1062,
+
 }
 ERR_INFO = {}
 ERR_INFO["1000-2"] = "会话KEY校验失败"
@@ -162,4 +198,77 @@ function MyApp:run()
     self:enterScene("MainScene")
 end
 
+
+-- 1000，用户登陆。
+-- INT32  MID 
+-- STRING 密码
+-- 返回
+-- INT32 错误代码
+-- {
+--         static const std::int32_t   REGISTER_SUCCESS = 0;           //登陆成功
+--         static const std::int32_t   REGISTER_FAILED = 1;        //登陆失败, 未知错误.
+--         static const std::int32_t   REGISTER_KEY_ERROR = 2;         //会话KEY校验失败
+--         static const std::int32_t   REGISTER_RELOGIN = 3;           //重复登陆, 只会发给前一个连接.
+-- }
+
+-- 1001， 进入房间
+-- INT32 服务器ID
+-- INT32 房间ID
+-- 返回
+-- INT32 错误代码
+-- INT32 座位ID
+-- STRING 服务器端版本号
+--  
+-- 1004 ，离开房间
+-- 返回
+-- 无返回值
+
+-- 1026， 游戏结束
+
+-- 1027， 玩家准备就绪 
+-- 返回，广播
+-- INT32 MID
+
+-- 1038， 请求抢庄
+-- INT32 , 0，不抢。1，抢庄
+-- 返回，广播
+-- INT32 座位ID 
+-- INT32 , 0，不抢。1，抢庄
+
+-- 1041， 亮牌
+-- 返回 （广播）
+-- INT32 座位ID
+-- STRING 牌，固定读三张
+-- INT32 牌型
+
+
+-- 1042 ，服务器通知选择倍数
+
+-- 1043， 玩家选择压注倍数
+-- INT32 倍数
+-- 返回 (广播)
+-- INT32 座位号
+-- INT32 倍数
+
+-- 1044 游戏开始
+-- INT32, 进入本局的玩家数
+-- INT32 座位ID （循环）
+
+-- 1045， 发牌
+-- STRING 牌（读三张） （旁观玩家收到的牌是 "-"）
+
+-- 1046, 结算
+
+-- 1047, 推送游戏状态信息
+-- INT32 游戏状态
+-- INT32 游戏子状态
+-- INT32 庄家座位
+-- INT32 玩家个数
+-- //循环
+-- INT32 座位ID
+-- INT32 MID
+
+-- INT32 是否准备就绪
+-- INT32倍数
+-- INT32 是否抢庄 //-1， 未表决。0，不抢。1，抢庄
 return MyApp

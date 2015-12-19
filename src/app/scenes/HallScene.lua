@@ -149,7 +149,7 @@ end
 --100
 function HallScene:fun1(target, event )
     if not self:btnScale(target, event) then return end
-    display.replaceScene(require("app.scenes.GameScene").new())
+    display.replaceScene(require("app.scenes.GameScene100").new())
     
 end
 

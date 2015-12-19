@@ -292,5 +292,54 @@ function SendCMD:getHongBao(id)
     self.socket:send(packet)
 end
 
+------------------------百人场---------------------------------------
+--快速开始 进入房间
+function SendCMD:inRoom100(server_id,rid)
+    local packet = ByteArray.new()
+    packet:Begin(CMD.IN_ROOM100)
+    packet:writeInt(server_id)
+    packet:writeInt(rid)
+    packet:End()
+    self.socket:send(packet)
+end
+
+
+function SendCMD:chipin(data)
+    local packet = ByteArray.new()
+    packet:Begin(CMD.CHIP_IN)
+    packet:writeInt(data.seatid)
+    packet:writeInt(data.gold)
+    packet:End()
+    self.socket:send(packet)
+end
+
+function SendCMD:dice()
+    local packet = ByteArray.new()
+    packet:Begin(CMD.PLAYER_DICE)
+    packet:End()
+    self.socket:send(packet)
+end
+
+function SendCMD:downDealer()
+    local packet = ByteArray.new()
+    packet:Begin(CMD.DOWN_DEALER)
+    packet:End()
+    self.socket:send(packet)
+end
+
+function SendCMD:upDealer(chipin)
+    local packet = ByteArray.new()
+    packet:Begin(CMD.UP_DEALER)
+    packet:writeInt(chipin)
+    packet:End()
+    self.socket:send(packet)
+end
+
+
+
+------------------------百人场---------------------------------------
+
+
+
 
 return SendCMD

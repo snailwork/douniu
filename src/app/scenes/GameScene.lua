@@ -67,11 +67,11 @@ function GameScene:ctor(data)
 	self.parts["event"] = GameEvent.new(self)
     self.parts["sysMsg"] = SysMsg.new(layer:getChildByTag(385))
     SendCMD:quickInRoom(1000,data.typeId)
-    self.parts["delay-http"] = performWithDelay(self,function ( ... )
-        showDialogTip("网络连接出错，请检查wifi是否连接正常" , {"确定"} , function (isOK)
-                display.replaceScene(require("app.scenes.LoginScene").new(self.data))
-            end)
-    end,5)
+    -- self.parts["delay-http"] = performWithDelay(self,function ( ... )
+    --     showDialogTip("网络连接出错，请检查wifi是否连接正常" , {"确定"} , function (isOK)
+    --             display.replaceScene(require("app.scenes.LoginScene").new(self.data))
+    --         end)
+    -- end,5)
 
     if device.platform == "android" then
         self:setKeypadEnabled(true)
@@ -207,6 +207,7 @@ function GameScene:setDealer(seatid)
     end
     
 end
+
 
 function GameScene:clear()
     for i=1,5 do

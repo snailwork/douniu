@@ -102,11 +102,11 @@ function Seat:sit(udata)
     self:changeName(udata.name)
     self:changeGold(udata.gold)
     self:changePic(udata.icon)
-    if checkint(udata.status) == 1 or checkint(udata.status) ==  2 then
-        self:setCardsVisible(true)
-    else
+    -- if checkint(udata.status) == 1 or checkint(udata.status) ==  2 then
+    --     self:setCardsVisible(true)
+    -- else
         self:setCardsVisible(false)
-    end
+    -- end
     self.parts["winText"]:setVisible(false)
     self.parts["niu"]:setVisible(false)
     self.parts["qiangZhuang"]:setVisible(false)

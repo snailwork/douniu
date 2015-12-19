@@ -7,7 +7,8 @@ function Action:ctor( game,action)
     action:setPositionY(action:getPositionY() - (display.height - 720)/2)
 
     local keys = {"beiBtns","calculate","qiangZhuang","niu"}
-
+    action:getChildByTag(571):setString(utils.numAbbrZh(USER.gold))
+    
     for i=1,4 do
         self.parts[keys[i]] = action:getChildByTag(i)
         self.parts[keys[i]]:setVisible(false)

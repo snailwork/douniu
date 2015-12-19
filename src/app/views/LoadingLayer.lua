@@ -28,8 +28,8 @@ function LoadingLayer:ctor(data)
 
 		cc.Director:getInstance():getTextureCache():addImage("default.png")
 		self:loadRes({
-			plist =  {"common","room","hall"},
-			jpg = {"room-bg"},
+			plist =  {"common","room"},
+			jpg = {"room-bg","loading","login-bg","room100-bg","roomlist-bg","store-bg"},
 		})
 	end
 	if CONFIG.lType == 3 then --第一次启动，走自动登陆，需要加载资源

@@ -2,6 +2,7 @@
 --房间信息
 function ParseXml.parseRoomInfo(roomdata)
 	CONFIG.roominfo = {}
+	CONFIG.room100info = {}
 	local item 
 	for k,v in pairs(roomdata) do
 		if v["@attributes"].type == "K1" then
@@ -9,12 +10,24 @@ function ParseXml.parseRoomInfo(roomdata)
 				item = v1["@attributes"]
 				table.insert(CONFIG.roominfo,{blind =  checkint(item.blind),min = checkint(item.min),typeId = checkint(item.rid)})
 			end
+		elseif v["@attributes"].type == "B1" then
+			if #v.item > 1 then
+				for i,v1 in ipairs(v.item) do
+					item = v1["@attributes"]
+					table.insert(CONFIG.room100info,{beginRid =  checkint(item["begin"]),endRid =  checkint(item["end"])})
+				end
+			else
+				item = v.item["@attributes"]
+				table.insert(CONFIG.room100info,{beginRid =  checkint(item["begin"]),endRid =  checkint(item["end"])})
+			end
 		end
 	end
+	-- dump(CONFIG.roominfo)
+	-- dump(CONFIG.room100info)
 end
 
 	
-	
+
 
 --任务
 function ParseXml.parseCommon(commom)

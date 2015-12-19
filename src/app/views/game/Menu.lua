@@ -29,8 +29,7 @@ function Menu:ctor(game,menu)
         end
         menu:getChildByTag(i):addTouchEventListener(handler(self, self["fun"..i]))
     end
-    dump(self.parts["menu"]:getChildByTag(351))
-    self:timeTask()
+
     self.parts["handler"] = app:addEventListener("app.updateTask",function (event)
         if event.data.status > 0 then
             self:timeTask()
@@ -51,7 +50,8 @@ function Menu:timeTask( )
         if checkint(v.subtype) == 11 and checkint(v.status) < 2 then
             v.comNum = v.comNum or 0 
             time = v.needNum - v.comNum --还需要多少秒
-            schedule(self.parts["menu"],function ( )
+            local handler_ = schedule(self.parts["menu"],function ( )
+                if self.parts["game"].gameStatus ~= 1 then return end
                 time = time -1
                 if time > 0 then
                     hour = checkint(time/3600)
@@ -63,7 +63,7 @@ function Menu:timeTask( )
                     timeText:setString(hour)
                 else
                     timeText:setString("")
-                    self.parts["menu"]:stopAllActions()
+                    self.parts["menu"]:stopAction(handler_)
                     self.parts["taskBtn"]:setOpacity(0)
 
                     local animationItem = cc.CSLoader:createNode("taskAni.csb")

@@ -167,7 +167,7 @@ function ParseSocket:fun1002(packet ,cmd)
 			banned = packet:readInt(),
 		}
 		data[i].seatid = CONFIG.seat[data[i].seatid]
-		data[i].status = status
+		-- data[i].status = status
 	end
 	-- utils.__merge(data,self:readPlayer(packet))
 	dump(data)
@@ -271,7 +271,6 @@ function ParseSocket:fun1107(packet ,cmd)
 		},
 		ctype = packet:readInt()
 	}
-	dump(data)
 	data.seatid = CONFIG.seat[data.seatid]
 	dump(data)
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
@@ -292,6 +291,10 @@ function ParseSocket:fun1108(packet ,cmd)
 	end
 	dump(data)
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+function ParseSocket:fun1111(packet ,cmd)
+	--游戏结束
 end
 
 --重连 房间数据
@@ -364,6 +367,10 @@ function ParseSocket:fun1004(packet ,cmd)
 		mid = packet:readInt()
 	}
 	dump(data)
+	-- if display.getRunningScene() == "GameScene100" then
+
+	-- end
+	
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
 end
 
@@ -485,6 +492,215 @@ function ParseSocket:fun1032(packet,cmd)
 	dump(data)
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
 end
+
+------------------------百人场---------------------------------------
+--玩家请求丢骰子
+function ParseSocket:fun1062(packet,cmd)
+	local data = {
+		point = packet:readInt(),
+		point1 = packet:readInt()
+	}
+	
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--结算
+function ParseSocket:fun1061(packet,cmd)
+	local data = {win = 0,meWin = 0,gold = 0}
+	for i=1,5 do
+		if i == 1 then
+			packet:readInt()
+			packet:readInt()
+			packet:readInt()
+			local num = packet:readInt()
+			for i=1,num do
+				packet:readInt()
+				packet:readLongInt()
+				packet:readLongInt()
+			end
+		else
+			data[i] = {
+				seatid = packet:readInt(), --当seatid为1时 忽略
+				ctype = packet:readInt(),
+			}
+			packet:readInt() --谁赢 0是庄赢 1是闲家赢
+			local num = packet:readInt()
+			-- data[i].seats = {}
+			for i=1,num do
+				local mid = packet:readInt()
+				local win = packet:readLongInt()
+				local gold = packet:readLongInt()
+				if mid == USER.mid then
+					data.meWin = data.meWin + win
+					data.gold = gold
+				end
+				data.win = data.win + win
+			end
+		end
+	end
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--推送抢庄列表
+function ParseSocket:fun1060(packet,cmd)
+	local num = packet:readInt()
+	for i=1,num do
+		local data = {
+			mid = packet:readInt(),
+			chipin = packet:readLongInt()
+		}
+		table.insert(CONFIG.upDealer,data)
+		dump(data)
+	end
+	-- self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--推送历史记录
+function ParseSocket:fun1059(packet,cmd)
+	local num = packet:readInt()
+	local data = {}
+	for i=1,num do
+		data[i]= {}
+		for j=1,4 do
+			data[i][j] = {
+				win = packet:readInt() --0为庄家赢
+			}
+		end
+	end
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--通知庄家丢骰子
+function ParseSocket:fun1058(packet,cmd)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--闲加请求下注
+function ParseSocket:fun1057(packet,cmd)
+	local err = packet:readInt()
+	local data = {}
+	if err == 0 then
+		data = {
+			seatid = packet:readInt(),
+			newchipin = packet:readLongInt(),
+			chipin = packet:readLongInt(),
+			totalGold = packet:readLongInt(),
+			max = packet:readLongInt(),
+		}
+	end
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--开始压注
+function ParseSocket:fun1056(packet,cmd)
+	local data = {
+		max = packet:readLongInt(),
+	}
+	
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--下注限额
+function ParseSocket:fun1055(packet,cmd)
+	packet:readLongInt()
+	local data = {
+		-- mid = packet:readInt(),
+	}
+	packet:readInt()
+	for i=1,4 do
+		data[i] = packet:readLongInt()
+	end
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--移除抢庄列表
+function ParseSocket:removeDealer(mid)
+	for i,v in ipairs(CONFIG.upDealer) do
+		if v.mid == mid then
+			table.remove(CONFIG.upDealer,i)
+			break
+		end
+	end
+end
+
+--广播下庄
+function ParseSocket:fun1007(packet,cmd)
+	local mid = packet:readInt()
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--请求不抢庄
+function ParseSocket:fun1054(packet,cmd)
+	local mid = packet:readInt()
+	self:removeDealer(mid)
+	dump(mid)
+end
+
+--请求抢庄
+function ParseSocket:fun1053(packet,cmd)
+	local data = {
+		mid = packet:readInt(),
+		chipin = packet:readLongInt()
+	}
+	
+	
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--上庄
+function ParseSocket:fun1006(packet,cmd)
+	packet:readInt()
+	local data = {
+		mid = packet:readInt(),
+		seatid = packet:readInt(),
+		chipin = packet:readLongInt(),
+		gold = packet:readLongInt()
+	}
+	self:removeDealer(data.mid)
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+
+--亮牌
+function ParseSocket:fun1041(packet ,cmd)
+	local data = {
+		seatid = packet:readInt(),
+		cards = {
+			packet:readString(),
+			packet:readString(),
+			packet:readString(),
+			packet:readString(),
+			packet:readString()
+		},
+		ctype = packet:readInt()
+	}
+	dump(data)
+	self.socketEvent:dispatchEvent({name = cmd,data = data})
+end
+--进房间
+function ParseSocket:fun1001(packet ,cmd)
+	local data = {
+		err = packet:readInt(),
+		version = packet:readInt(),
+		
+	}
+	if data.err == 0 then
+		self.socketEvent:dispatchEvent({name = cmd,data = data})
+	else
+		showDialogTip("进入房间失败！",{"返回大厅"},function ( flag )
+			display.replaceScene(require("app.scenes.HallScene").new())
+			end)
+	end
+	dump(data)
+end
+
+------------------------百人场---------------------------------------
 
 return ParseSocket
 
