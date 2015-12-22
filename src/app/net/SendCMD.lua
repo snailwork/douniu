@@ -322,21 +322,34 @@ end
 
 function SendCMD:downDealer()
     local packet = ByteArray.new()
-    packet:Begin(CMD.DOWN_DEALER)
+    packet:Begin(CMD.REQ_DOWN_DEALER)
     packet:End()
     self.socket:send(packet)
 end
 
 function SendCMD:upDealer(chipin)
+    dump(chipin)
     local packet = ByteArray.new()
-    packet:Begin(CMD.UP_DEALER)
+    packet:Begin(CMD.REQ_UP_DEALER)
     packet:writeInt(chipin)
     packet:End()
     self.socket:send(packet)
 end
 
+function SendCMD:sit(seatid)
+    local packet = ByteArray.new()
+    packet:Begin(CMD.SIT_100)
+    packet:writeInt(seatid)
+    packet:End()
+    self.socket:send(packet)
+end
 
-
+function SendCMD:stand()
+    local packet = ByteArray.new()
+    packet:Begin(CMD.STAND_100)
+    packet:End()
+    self.socket:send(packet)
+end
 ------------------------百人场---------------------------------------
 
 

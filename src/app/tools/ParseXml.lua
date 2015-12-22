@@ -18,7 +18,7 @@ function ParseXml.parseRoomInfo(roomdata)
 				end
 			else
 				item = v.item["@attributes"]
-				table.insert(CONFIG.room100info,{beginRid =  checkint(item["begin"]),endRid =  checkint(item["end"])})
+				table.insert(CONFIG.room100info,{beginRid =  checkint(item["begin"]),endRid =  checkint(item["end"]),min = checkint(item["max"])})
 			end
 		end
 	end
@@ -133,8 +133,16 @@ function ParseXml.parseCommon(commom)
 	-- CONFIG.openActivity =  config[27]["@attributes"].count == "1" and true or false
 	-- CONFIG.getUserInfo =  config[28]["@attributes"].count == "1" and true or false
 	CONFIG.activity = {}
-	for k,v in pairs(commom.content.mobileac.item) do
- 		local data = v["@attributes"]
+	dump(commom.content.mobileac.item,"",5)
+	if #commom.content.mobileac.item > 1 then
+		for k,v in pairs(commom.content.mobileac.item) do
+	 		local data = v["@attributes"]
+	 		if checkint(data.isopen) == 1 then
+	 			table.insert(CONFIG.activity,data)
+	 		end
+ 		end
+ 	else
+ 		local data = commom.content.mobileac.item["@attributes"]
  		if checkint(data.isopen) == 1 then
  			table.insert(CONFIG.activity,data)
  		end

@@ -31,7 +31,7 @@ function Menu:ctor(game,menu)
     end
 
     self.parts["handler"] = app:addEventListener("app.updateTask",function (event)
-        if event.data.status > 0 then
+        if event.status > 0 then
             self:timeTask()
         else
             self.parts["animationItem"]:removeSelf()
@@ -83,15 +83,6 @@ function Menu:timeTask( )
     end
 
 end
-
-function Menu:menuLayerFun1(target, event )
-    if not self:btnScale(target, event) then return end
-end
-
-function Menu:menuLayerFun2(target, event )
-    if not self:btnScale(target, event) then return end
-end
-
 
 function Menu:btnScale(target, event )
     if event == 0 then

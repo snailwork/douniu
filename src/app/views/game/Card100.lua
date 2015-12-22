@@ -11,7 +11,7 @@ function Card:ctor(data)
     self.face = face
     self.numSp = display.newSprite()
             :addTo(face)
-            :pos(28,35)
+            :pos(28,50)
     if self.value > 0 then
         self:setFaceSprite()
     end
@@ -50,6 +50,7 @@ end
 
 function Card:flip()
     if self.value == 0 or self._fliped then return end
+    dump(self.bigScale)
     local time = 0.15
     local a1 = cc.ScaleBy:create(time,-0.01,1.2)
     local a2 = cc.ScaleTo:create(time,self.bigScale and self.bigScale or 1,self.bigScale and self.bigScale or 1)

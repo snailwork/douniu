@@ -45,6 +45,10 @@ function GameEvent:ctor(room)
 	    CMD.UP_DEALER ,
 	    --谁下庄
 	    CMD.DOWN_DEALER    ,
+	    CMD.GAME_OVER_100    ,
+	    CMD.GAME_INFO    ,
+	    CMD.SIT_100    ,
+	    CMD.STAND_100    ,
 	}
 	self.cmd = cmd
 	
@@ -54,28 +58,28 @@ function GameEvent:ctor(room)
 end
 
 
--- 任务送数据
-function GameEvent:fun1055(data)
-	--如果界面是打开的，更新界面 
-	for i,v in ipairs(data.data) do
-		if self.room.parts["menu"] then
-			if v.status == 1 and not table.indexof({11},v.pcate) then
-				self.room.parts["menu"]:updateTask(1)
-			elseif (v.pcate == 11 and CONFIG.MISSION_COM.reward_frequency > 0)  then
-				self.room.parts["menu"]:updateTask(1)
-			end
-		end
-	end
-end
+-- -- 任务送数据
+-- function GameEvent:fun1201(data)
+-- 	--如果界面是打开的，更新界面 
+-- 	for i,v in ipairs(data.data) do
+-- 		if self.room.parts["menu"] then
+-- 			if v.status == 1 and not table.indexof({11},v.pcate) then
+-- 				self.room.parts["menu"]:updateTask(1)
+-- 			elseif (v.pcate == 11 and CONFIG.MISSION_COM.reward_frequency > 0)  then
+-- 				self.room.parts["menu"]:updateTask(1)
+-- 			end
+-- 		end
+-- 	end
+-- end
 
--- 任务推送数据
-function GameEvent:fun1053(data)
-	--如果界面是打开的，更新界面 
-	-- dump(data.data)
-	if data.data.status > 0 then
-		self.room.parts["menu"]:updateTask(data.data.status)
-	end
-end
+-- -- 任务推送数据
+-- function GameEvent:fun1202(data)
+-- 	--如果界面是打开的，更新界面 
+-- 	-- dump(data.data)
+-- 	if data.data.status > 0 then
+-- 		self.room.parts["menu"]:updateTask(data.data.status)
+-- 	end
+-- end
 
 --表情
 function GameEvent:fun1032(data)
@@ -108,11 +112,35 @@ end
 function GameEvent:fun1002(data)
 	local data = data.data
 	dump(data)
-	for i,v in ipairs(data) do
-		if v.mid ~= USER.mid then
-			self.room.parts["seats"][v.seatid]:sit(v)
+	if display.getRunningScene().name == "GameScene100" then
+		if data.status and data.status > 2 then
+			for i,v in ipairs(self.room.parts["seats"]) do
+				v:setCardsVisible(true)
+			end
+			if data.status and data.status == 2 then
+				self.room.parts["action"]:startChipin()
+				self.room.parts["clock"]:start(15,function ( )
+					self.room.parts["action"]:stopChipin()
+					end)
+			end
 		end
-		table.insert(self.room.parts["users"],data)
+	end
+	for i,v in ipairs(data) do
+		if display.getRunningScene().name == "GameScene100" then
+			table.insert(self.room.parts["users"],v)
+			if v.seatid == 1 then
+				dump(v)
+				self.room.parts["seats"][v.seatid]:sit(v)
+			elseif checkint(v.seatid) > 0 then
+				v.chipin = v.gold
+				self.room.parts["seats_"][v.seatid]:sit(v)
+			end
+			
+		else
+			if v.mid ~= USER.mid then
+				self.room.parts["seats"][v.seatid]:sit(v)
+			end
+		end
 	end
 end
 
@@ -124,23 +152,24 @@ end
 function GameEvent:fun1004(data)
 	CONFIG.upDealer = {}
 	local data = data.data
-	for i,v in ipairs(self.room.parts["users"]) do
-		if v.mid == data.mid then
-			table.remove(self.room.parts["users"],i)
-			break
+	if display.getRunningScene().name == "GameScene100" then
+		for i,v in ipairs(self.room.parts["users"]) do
+			if v.mid == data.mid then
+				table.remove(self.room.parts["users"],i)
+				break
+			end
 		end
 	end
-
 	if data.mid == USER.mid then
 		self:exit()
-		if display.getRunningScene() == "GameScene100" then
+		if display.getRunningScene().name == "GameScene100" then
 			display.replaceScene(require("app.scenes.HallScene").new())
 		else
 			display.replaceScene(require("app.scenes.RoomlistScene").new())
 		end
 		USER.seatid = nil
 	else
-		if display.getRunningScene() == "GameScene100" then
+		if display.getRunningScene().name == "GameScene100" then
 			-- for i=12,19 do
 			-- 	if self.room:getChildByTag(i).model.mid  == data.mid then
 			-- 		self.room:getChildByTag(i).head:setVisible(false)
@@ -330,6 +359,7 @@ function GameEvent:fun1111(data)
 	self.room.gameStatus = 0
 end
 
+
 --房间信息
 function GameEvent:fun1109(data)
 	local data = data.data
@@ -417,13 +447,48 @@ end
 
 --摇骰子结果
 function GameEvent:fun1062(data)
-	self.room:stopDice(data.data)
+	local data = data.data
+	self.room:stopDice(data)
+	local start = data.point + data.point1
+	start = start % 5
+	if start == 0 then
+		start = 5
+	end
+	self.room.parts["action"]:stopChipin()
+	self.room:startDealCard(start)
 end
 --结算
 function GameEvent:fun1061(data)
 	local data = data.data
-	self.room:showWin(data) 
+	self.room:showWin(data)
+	local his = {}
+	for i,v in ipairs(data) do
+		his[i] = v.win 
+	end
+	if #self.room.parts["his"] > 10 then
+		table.remove(self.room.parts["his"],1)
+	end
+	table.insert(self.room.parts["his"],his)
+
+	app:dispatchEvent({name = "app.updatachip", nil})
+	
 end
+--游戏结束
+function GameEvent:fun1026(data)
+	for i,v in ipairs(self.room.parts["seats"]) do
+		if v.model.seatid ~= 1 then
+			v:reset()
+		else
+			v:setCardsVisible(false)
+			v.parts["niu"]:setVisible(false)
+		end
+	end
+	for i,v in ipairs(self.room.parts["add-golds"]) do
+		v:removeSelf()
+	end
+	self.room.parts["add-golds"] = {}
+end
+
 --历史记录
 function GameEvent:fun1059(data)
 	
@@ -435,33 +500,60 @@ function GameEvent:fun1058(data)
 	self.room:startDice()
 end
 
-function GameEvent:fun1055(data)
+function GameEvent:fun1057(data)
 	local data = data.data
+	dump(data)
 	-- self.room.parts["seats"][1]:updateChipin(data)
-	for i=1,4 do
-		self.room.parts["seats"][i+1]:changeChpin(data[i].chipin)
-		self.room.parts["seats"][i+1]:changeName(data[i].totalGold)
-	end
-
+	-- for i=1,4 do
+		self.room:addGold({seatid = data.seatid,mid = USER.mid})
+		self.room.parts["seats"][data.seatid]:changeChpin(data.chipin)
+		self.room.parts["seats"][data.seatid]:changeName(data.totalGold)
+	-- end
 end
+
 --开始下注
 function GameEvent:fun1056(data)
 	self.room.parts["action"]:startChipin()
-	self.room.parts["clock"]:start(10,function ( )
+	self.room.parts["clock"]:start(15,function ( )
 		self.room.parts["action"]:stopChipin()
 		end)
 end
 
+-- --房间信息
+function GameEvent:fun1047(data)
+	local data = data.data
+	for i,v in ipairs(data) do
+		if v.seatid ==  1 then
+			self.room.parts["seats"][v.seatid]:changeChpin(v.chipin)
+			break
+		end
+	end
+end
+
 --更新天地玄黄的数值
-function GameEvent:fun1057(data)
+function GameEvent:fun1055(data)
 	local data = data.data
 	for i=1,4 do
+		if self.room.parts["seats"][i+1].model.total < data[i] then
+			self.room:addGold({seatid = i+1})
+		end
+
 		self.room.parts["seats"][i+1]:changeName(data[i])
+		-- self.room.parts["seats"]:addGold()
 	end
 end
 
 function GameEvent:fun1006(data)
 	local data = data.data
+	
+	for i,v in ipairs(self.room.parts["users"]) do
+		if v.mid == data.mid then
+			data.name = v.name
+			data.icon = v.icon
+			break
+		end
+	end
+
 	self.room.parts["seats"][1]:sit(data)
 end
 
@@ -471,17 +563,53 @@ function GameEvent:fun1007(data)
 end
 
 --亮牌
-function GameEvent:fun41(data)
+function GameEvent:fun1041(data)
 	local data = data.data
 	dump(data,"",5)
-	self.room.parts["seats"][data.seatid]:showCard(1,5,data.cards)
-	self.room.parts["seats"][data.seatid]:showNiuType(data.ctype)
-	
+	self.room.parts["seats"][data.seatid]:showCard(data.cards)
+	performWithDelay(self.room,function (  )
+		self.room.parts["seats"][data.seatid]:showNiuType(data.ctype)
+	end,0.5)
 end
 
 
 --请求抢庄
-function ParseSocket:fun1053(packet,cmd)
+function GameEvent:fun1053(data)
+	local data = data.data
+	for i,v in ipairs(self.room.parts["users"]) do
+		if v.mid == data.mid then
+			data.name = v.name
+			data.icon = v.icon
+			break
+		end
+	end
+	if data.mid == USER.mid then
+		self.room.parts["action"]:setUpdealer("下庄")
+	end
+	table.insert(CONFIG.upDealer,data)
+end
+
+
+--请求抢庄
+function GameEvent:fun1054(data)
+	if data.data.mid == USER.mid then
+		self.room.parts["action"]:setUpdealer("上庄")
+	end
+end
+
+--站起
+function GameEvent:fun1902(data)
+	local data = data.data
+	for i,v in ipairs(self.room.parts["users"]) do
+		if v.mid == data.mid then
+			self.room.parts["seats_"][data.seatid]:stand()
+			break
+		end
+	end
+end
+
+--座下
+function GameEvent:fun1901(data)
 	local data = data.data
 	for i,v in ipairs(self.room.parts["users"]) do
 		if v.mid == data.mid then
@@ -491,11 +619,8 @@ function ParseSocket:fun1053(packet,cmd)
 		end
 	end
 
-	table.insert(CONFIG.upDealer,data)
+	self.room.parts["seats_"][data.seatid]:sit(data)
 end
-
-
-
 
 ------------------------百人场---------------------------------------
 

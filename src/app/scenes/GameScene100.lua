@@ -8,7 +8,7 @@ local Action = require("app.views.game.Action100")
 local SysMsg = require("app.views.game.SysMsg")
 local Chat = require("app.views.game.Chat")
 local Interaction = require("app.views.game.Interaction")
-local Clock = require("app.views.game.Clock")
+local Clock = require("app.views.game.Clock100")
 
 
 function GameScene:ctor(data)
@@ -19,11 +19,15 @@ function GameScene:ctor(data)
     local layer = cc.uiloader:load("room100.csb"):addTo(self)
     	:align(display.CENTER, display.cx, display.cy)
     self.parts  ={}
+    self.parts["users"] = {}
     self.parts["layer"] = layer
     self.parts["delay"] = {}
+    self.parts["add-golds"] = {}
+    self.parts["values"] = {100,1000,10000,100000,500000,2000000}
+
     self.parts["seatPanel"] = layer:getChildByTag(342)
     self.parts["seats"] = {}
-    self.parts["seats_"] = {}
+    self.parts["seats_"] = {1}
     self.parts["clock"] = Clock.new(layer:getChildByTag(116))
     self.parts["menu"] = Menu.new(self,layer:getChildByTag(302)) 
     self.parts["action"] = Action.new(self,layer:getChildByTag(268)) 
@@ -31,18 +35,20 @@ function GameScene:ctor(data)
     self.parts["chat-layer"] =  Chat.new(self)
     self.parts["chat-layer"].parts["chat"]:zorder(999)
     self.parts["show_win"] = layer:getChildByTag(799)
-    self.parts["show_win"]:setVisible(false)
+    self.parts["show_win"]:setOpacity(0)
 
     local seat
     for i=1,5 do
         seat =Seat.new(self.parts["seatPanel"]:getChildByTag(i),i)
         table.insert(self.parts["seats"],seat)
+        seat.parts["seat"]:setTouchEnabled(true)
+        seat.parts["seat"]:addTouchEventListener(handler(self,self.onSeatClick))
     end
     
     for i=12,19 do
-        seat = self.parts["seatPanel"]:getChildByTag(i)
-        seat:getChildByTag(1):setString("")
-        seat:addNodeEventListener(handler(self,self.onSeatClick))
+        seat = require("app.views.game.Seat100_").new(self.parts["seatPanel"]:getChildByTag(i)) 
+        seat.parts["seat"]:setTouchEnabled(true)
+        seat.parts["seat"]:addTouchEventListener(handler(self,self.sitClick))
         table.insert(self.parts["seats_"],seat)
     end
     layer:getChildByTag(265):setTouchEnabled(true)
@@ -52,6 +58,13 @@ function GameScene:ctor(data)
 	self.parts["batchChip"] = Chip:getBatchNode()
         :pos(display.cx,display.cy)
 		:addTo(layer,10)
+
+    self.parts["batchAddChip"] =Chip:getBatchNode()
+        :pos(display.cx,display.cy)
+        :addTo(layer,5)
+    self.parts["seatPanel"]:zorder(6)
+    layer:getChildByTag(302):zorder(7)
+    self.parts["show_win"]:zorder(8)
 
 	self.parts["event"] = GameEvent.new(self)
     self.parts["sysMsg"] = SysMsg.new(layer:getChildByTag(385))
@@ -72,6 +85,29 @@ function GameScene:ctor(data)
     end
 end
 
+function GameScene:sitClick(target,event)
+    dump(event)
+    if event == 0 then
+        return true
+    elseif event == 2 then
+        target:setTouchEnabled(false)
+        performWithDelay(target,function()
+                target:setTouchEnabled(true)
+            end, 0.5)
+        -- if checkint(target.model.mid) > 0 then
+        --     --显示用户信息
+        --     local user_info = require("app.views.UserInfo").new(
+        --         {mid = target.model.mid , name = target.model.name, vip = target.model.vip, gold = target.model.gold , icon = target.model.icon},
+        --         function ( ... )
+        --         self.parts["user_info"] = nil
+        --     end)
+        --     self.parts["user_info"] = user_info
+        -- else
+            SendCMD:sit(checkint(target:getTag()) - 10)
+        -- end
+    end
+end
+
 
 function GameScene:onSeatClick(target,event)
     dump(event)
@@ -79,28 +115,16 @@ function GameScene:onSeatClick(target,event)
         return true
     elseif event == 2 then
         utils.playSound("click")
-        target:setTouchEnabled(false)
-        performWithDelay(target,function()
-                target:setTouchEnabled(true)
-            end, 0.5)
-        if checkint(target.model.mid) > 0 then
-            --显示用户信息
-            local user_info = require("app.views.UserInfo").new(
-                {mid = target.model.mid , name = target.model.name, vip = target.model.vip, gold = target.model.gold , icon = target.model.icon},
-                function ( ... )
-                self.parts["user_info"] = nil
-            end)
-            self.parts["user_info"] = user_info
-        else
-            SendCMD:sit(checkint(target:getTag()) - 9)
-        end
-    end
-end
-
-
-function GameScene:clear()
-    for i=1,5 do
-        self.parts["seatPanel"]:getChildByTag(i):setVisible(false)
+        if checkint(self.parts["action"].parts["data"]) == 0 then return end
+        local data = {
+            seatid = checkint(target:getTag()),
+            gold = self.parts["values"][self.parts["action"].parts["data"]]
+        }
+        
+        dump(self.parts["action"].parts["data"])
+        dump(self.parts["values"][self.parts["action"].parts["data"]])
+        SendCMD:chipin(data)
+       
     end
 end
 
@@ -115,6 +139,29 @@ function GameScene:onExit()
     utils.stopMusic()
 end
 
+function GameScene:addGold(data)
+    dump(data)
+    local seat = self.parts["seatPanel"]:getChildByTag(data.seatid)
+    local c 
+    if data.mid  == USER.mid then
+        local point = self.parts["batchAddChip"]:convertToNodeSpace(self.parts["seatPanel"]:getChildByTag(10):convertToWorldSpace(cc.p(40,-82)))
+        local to_point = self.parts["batchAddChip"]:convertToNodeSpace(seat:convertToWorldSpace(cc.p(120,120)))
+        c = Chip:new(point.x,point.y,self.parts["batchAddChip"])
+        c:setScale(0.8)
+        to_point.x =  to_point.x + math.random(-100,40)
+        to_point.y =  to_point.y + math.random(-100,40)
+        local action = transition.sequence({
+                    cc.FadeIn:create(0.03),
+                    transition.newEasing(cc.MoveTo:create(0.5,to_point),"OUT"),
+                })
+        c:runAction(action)
+    else
+        local point = self.parts["batchAddChip"]:convertToNodeSpace(seat:convertToWorldSpace(cc.p(120,120)))
+        c = Chip:new(point.x + math.random(-100,40),point.y + math.random(-100,40),self.parts["batchAddChip"])
+        c:setScale(0.8)
+    end
+    table.insert(self.parts["add-golds"],c)
+end
 
 function GameScene:moveToSeat(data,callback)
     local seat,to_seat,to_point
@@ -171,6 +218,13 @@ function GameScene:startDice()
 
 end
 
+
+function GameScene:stopDice()
+    --显示摇骰子的按钮
+
+end
+
+
 --
 function GameScene:showWin(data)
     if checkint(USER.seatid) == 1 then
@@ -208,7 +262,8 @@ function GameScene:showWin(data)
 end
 
 --游戏开始时发牌动画
-function GameScene:startDealCard(cards,start)
+function GameScene:startDealCard(start)
+    dump(start)
     local data = self.parts["seats"]
     local dataSort = {}
     for i=start,#data do
@@ -228,9 +283,8 @@ function GameScene:startDealCard(cards,start)
             for j=1,5 do
                 self.parts["delay"][#self.parts["delay"] +1 ] = performWithDelay(self,function (  )
                     -- utils.playSound("startDealCard"..j)
-                    local card = display.newSprite("#room100/back.png")
+                    local card = display.newSprite("#room100/mj/back.png")
                     card:setPositionY(100)
-                    card:setScale(0.53)
                     batch:addChild(card)
                     local convert_sp = v.parts["seat"]:getChildByTag(j)
                     action = cc.MoveTo:create(time,batch:convertToNodeSpace(convert_sp:convertToWorldSpace(cc.p(0,0))) )

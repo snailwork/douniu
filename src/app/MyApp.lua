@@ -154,6 +154,12 @@ CMD = {
     GAME100_CALCULATE    = 1061,
     --玩家请求丢股子
     PLAYER_DICE    = 1062,
+    --游戏结束
+    GAME_OVER_100 = 1026,
+    --游戏房间状态信息
+    GAME_INFO = 1047,
+    SIT_100 = 1901,
+    STAND_100 = 1902,
 
 }
 ERR_INFO = {}
