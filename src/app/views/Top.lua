@@ -19,8 +19,10 @@ function Top:ctor(sp,prant)
     self.parts["head"] = head
 
      self.handler = app:addEventListener("app.updatachip", function(event)
-            vals = {USER.level,USER.name,USER.gold}
+            vals = {"LV:"..USER.level,USER.name,USER.gold}
+            dump(vals)
             for i=1,3 do
+                dump(sp:getChildByTag(i))
                 sp:getChildByTag(i):setString(vals[i])
             end
         end)
@@ -43,6 +45,7 @@ end
 function Top:hide()
     app:removeEventListener(self.handler)
     app:removeEventListener(self.handlerUpic)
+    self.parts["top"]:removeSelf()
 end
 
 function Top:btnScale(target, event )

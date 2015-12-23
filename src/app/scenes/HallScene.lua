@@ -43,6 +43,7 @@ function HallScene:initOnLine(  )
                 if data.svflag ~= 1 then
                     -- createPromptBox("获取排行榜数据出错!")
                 else
+                    if not self.parts["model"] then return end
                     for k,v in pairs(data.data.arr) do
                         -- dump(v)
                         local item = self.parts["model"]:clone()
@@ -227,6 +228,7 @@ function HallScene:showFeedback(data)
 end
 
 function HallScene:onExit()
+    self.parts["model"] = nil
     self.parts["top"]:hide()
 end
 

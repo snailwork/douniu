@@ -358,7 +358,16 @@ function ParseSocket:fun1110(packet ,cmd)
 end
 --重连进房间
 function ParseSocket:fun1999(packet ,cmd)
-	display.replaceScene(require("app.scenes.GameScene").new())
+	local data = {
+		room_id = packet:readInt(),
+		typeId = packet:readString(),
+	}
+	data.typeId = checkint(data.typeId)
+	if CONFIG.room100info[1].beginRid == data.room_id then
+		display.replaceScene(require("app.scenes.GameScene100").new())
+	else
+		display.replaceScene(require("app.scenes.GameScene").new(data))
+	end
 end
 
 --退出房间
@@ -395,6 +404,7 @@ function ParseSocket:fun1000(packet ,cmd)
 	else
 		self.neddHeart =  true
 	end
+	dump("app.login" )
 	app:dispatchEvent({name = "app.login",data = data})
 end
 
@@ -555,6 +565,7 @@ function ParseSocket:fun1061(packet,cmd)
 			end
 		end
 	end
+	
 	data.win = -data.win
 	dump(data)
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
@@ -571,7 +582,7 @@ function ParseSocket:fun1060(packet,cmd)
 		table.insert(CONFIG.upDealer,data)
 		dump(data)
 	end
-	-- self.socketEvent:dispatchEvent({name = cmd,data = data})
+	self.socketEvent:dispatchEvent({name = cmd})
 end
 
 --推送历史记录
@@ -648,7 +659,7 @@ end
 --广播下庄
 function ParseSocket:fun1007(packet,cmd)
 	local mid = packet:readInt()
-	self.socketEvent:dispatchEvent({name = cmd,data = data})
+	self.socketEvent:dispatchEvent({name = cmd,data ={mid = mid}})
 end
 
 --请求不抢庄
@@ -710,14 +721,15 @@ end
 --站起
 function ParseSocket:fun1902(packet ,cmd)
 	local err = packet:readInt()
+	dump(err)
 	if err == 0 then
 		local data = {
 			mid = packet:readInt(),
 			seatid = packet:readInt()
 		}
+		dump(data)
+		self.socketEvent:dispatchEvent({name = cmd,data = data})
 	end
-	dump(data)
-	self.socketEvent:dispatchEvent({name = cmd,data = data})
 end
 
 --座下

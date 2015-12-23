@@ -126,6 +126,7 @@ function GameEvent:fun1002(data)
 		end
 	end
 	for i,v in ipairs(data) do
+		dump(display.getRunningScene().name)
 		if display.getRunningScene().name == "GameScene100" then
 			table.insert(self.room.parts["users"],v)
 			if v.seatid == 1 then
@@ -469,8 +470,8 @@ function GameEvent:fun1061(data)
 		table.remove(self.room.parts["his"],1)
 	end
 	table.insert(self.room.parts["his"],his)
-
-	app:dispatchEvent({name = "app.updatachip", nil})
+	
+	
 	
 end
 --游戏结束
@@ -497,6 +498,7 @@ end
 
 --开始摇骰子
 function GameEvent:fun1058(data)
+	
 	self.room:startDice()
 end
 
@@ -513,6 +515,10 @@ end
 
 --开始下注
 function GameEvent:fun1056(data)
+	if checkint(USER.seatid == 1) then
+			self.room.parts["clock"]:start(15)
+		return
+	end
 	self.room.parts["action"]:startChipin()
 	self.room.parts["clock"]:start(15,function ( )
 		self.room.parts["action"]:stopChipin()
@@ -542,7 +548,7 @@ function GameEvent:fun1055(data)
 		-- self.room.parts["seats"]:addGold()
 	end
 end
-
+--谁上庄
 function GameEvent:fun1006(data)
 	local data = data.data
 	
@@ -553,13 +559,20 @@ function GameEvent:fun1006(data)
 			break
 		end
 	end
-
 	self.room.parts["seats"][1]:sit(data)
+	if data.mid == USER.mid then
+		self.room.parts["menu"]:setUpdealer("下庄")
+	end
 end
-
+--谁下庄
 function GameEvent:fun1007(data)
 	local data = data.data
-	self.room.parts["seats"][1]:reset()
+	dump(data)
+	self.room.parts["seats"][1]:stand()
+	if data.mid == USER.mid then
+		self.room.parts["menu"]:setUpdealer("上庄")
+		self.room.parts["menu"].parts["updl"]:setVisible(true)
+	end
 end
 
 --亮牌
@@ -583,18 +596,27 @@ function GameEvent:fun1053(data)
 			break
 		end
 	end
-	if data.mid == USER.mid then
-		self.room.parts["action"]:setUpdealer("下庄")
-	end
+	
 	table.insert(CONFIG.upDealer,data)
 end
 
-
---请求抢庄
-function GameEvent:fun1054(data)
-	if data.data.mid == USER.mid then
-		self.room.parts["action"]:setUpdealer("上庄")
+--抢庄列表
+function GameEvent:fun1060(data)
+	local data = data.data
+	for i,v in ipairs(CONFIG.upDealer) do
+		for i1,v1 in ipairs(self.room.parts["users"]) do
+			if v.mid == v1.mid then
+				v.name = v1.name
+				v.icon = v1.icon
+				break
+			end
+		end
 	end
+end
+
+--请求下庄
+function GameEvent:fun1054(data)
+	self.room.parts["menu"].parts["updl"]:setVisible(false)
 end
 
 --站起

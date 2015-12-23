@@ -21,8 +21,19 @@ function Menu:ctor(game,menu)
     self.parts["listener"] = listener
     self.parts["menu"]:getChildByTag(907):setVisible(false)
     self.parts["menu"]:getChildByTag(936):setVisible(false)
-    self.parts["menu"]:getChildByTag(476):setVisible(false)
+
+    self.parts["his"] = self.parts["menu"]:getChildByTag(476)
+    self.parts["his"]:setVisible(false)
+
+
+    self.parts["his-list"] = self.parts["his"]:getChildByTag(482)
+    self.parts["his-model"] =  self.parts["his"]:getChildByTag(477)
+    self.parts["his-btn-model"] =  self.parts["his"]:getChildByTag(185)
+    self.parts["his-model"]:setVisible(false)
+    self.parts["his-btn-model"]:setVisible(false)
+
     
+
     self.parts["ctype"] = menu:getChildByTag(119)
     self.parts["ctype"]:setVisible(false)
     self.parts["taskBtn"] = menu:getChildByTag(2)
@@ -51,9 +62,12 @@ function Menu:ctor(game,menu)
    
 end
 
+--设置上庄按钮
 function Menu:setUpdealer(str)
-    self.parts["updl"]:setString(str)
+    self.parts["updl"]:setVisible(true)
+    self.parts["updl"]:getChildByTag(1):setString(str)
 end
+
 function Menu:timeTask( )
     local timeText = self.parts["menu"]:getChildByTag(351)
     local hour,time
@@ -135,6 +149,7 @@ function Menu:menuLayerFun2(target, event )
         showAutoTip("您还没下庄不能站起房间！")
         return
     end
+    self.parts["menuLayer"]:setVisible(false)
     SendCMD:stand()
 end
 --out
@@ -204,7 +219,7 @@ function Menu:fun5(target, event )
 end
 
 
---dealer list
+--user list
 function Menu:fun6(target, event )
     if not self:btnScale(target, event) then return end
     local his = self.parts["menu"]:getChildByTag(907)   
@@ -265,12 +280,15 @@ function Menu:fun7(target, event )
     end
     if event ~= 2 then return false end
     utils.playSound("click")
+    if checkint(USER.seatid) == 1 then
+        SendCMD:downDealer()
+        return
+    end
 
-
-    local his = self.parts["menu"]:getChildByTag(476)   
+    local his = self.parts["his"]
     his:setVisible(true)
-    local model = his:getChildByTag(477)
-    local list = his:getChildByTag(482)
+    local model = self.parts["his-model"]
+    local list = self.parts["his-list"]
     list:removeAllChildren()
     
     dump(CONFIG.upDealer)
@@ -279,66 +297,79 @@ function Menu:fun7(target, event )
         item:setVisible(true)
         item:getChildByTag(2):setString(v.name)
         item:getChildByTag(3):setString(utils.numAbbrZh(v.chipin))
-        -- local icon = item:getChildByTag(1)
+        local icon = item:getChildByTag(1)
 
-        -- utils.loadImage(v[2] , function ( succ, ccimage )
-        --     if succ then
-        --          local ret,errMessage = xpcall(function ( ... )
-        --             icon:setTexture(ccimage)
-        --             local size = icon:getContentSize()
-        --             if size.width > size.height then
-        --                 scale = 72/size.width
-        --             elseif size.height > size.width then
-        --                 scale = 72/size.height
-        --             else
-        --                 scale = 72/size.height
-        --             end
-        --             icon:setScale(scale)
-        --         end,function ( ... )
-        --         end)
-        --     end
-        -- end)
+        utils.loadImage(v.icon , function ( succ, ccimage )
+            if succ then
+                 local ret,errMessage = xpcall(function ( ... )
+                    icon:setTexture(ccimage)
+                    local size = icon:getContentSize()
+                    if size.width > size.height then
+                        scale = 62/size.width
+                    elseif size.height > size.width then
+                        scale = 62/size.height
+                    else
+                        scale = 62/size.height
+                    end
+                    icon:setScale(scale)
+                end,function ( ... )
+                end)
+            end
+        end)
 
-        -- local size = icon:getContentSize()
-        -- if size.width > size.height then
-        --     scale = 72/size.width
-        -- elseif size.height > size.width then
-        --     scale = 72/size.height
-        -- else
-        --     scale = 72/size.height
-        -- end
-        -- icon:setScale(scale)
+        local size = icon:getContentSize()
+        if size.width > size.height then
+            scale = 62/size.width
+        elseif size.height > size.width then
+            scale = 62/size.height
+        else
+            scale = 62/size.height
+        end
+        icon:setScale(scale)
 
         list:pushBackCustomItem(item)
     end
-    model = his:getChildByTag(185)
-    local item = model:clone()
+
+    local item = self.parts["his-btn-model"]:clone()
     item:setVisible(true)
-    if checkint(USER.seatid) == 1 then
-        item:getChildByTag(1):setString("下庄")
-    else
-        item:getChildByTag(1):setString("上庄")
-    end
-    item:addTouchEventListener(handler(self,self.upDealer))
-    self.parts["up"] = item:getChildByTag(1)
+    local btn = item:getChildByTag(380)
+    -- if checkint(USER.seatid) == 1 then
+    --     btn:getChildByTag(1):setString("下庄")
+    -- else
+        -- btn:getChildByTag(1):setString("上庄")
+    -- end
+    btn:addTouchEventListener(handler(self,self.upDealer))
+    self.parts["up"] = btn--:getChildByTag(1)
     list:pushBackCustomItem(item)
 end
 
 function Menu:upDealer(target, event )
-    dump(event)
-    if not self:btnScale(target, event) then return end
-     if checkint(USER.seatid) == 1 then
-        SendCMD:downDealer()
-    else
-        if USER.gold > CONFIG.room100info[1]["min"] then
-            self.parts["buying"]:show()
-        else
-            createMessageBox("","您的金币不够带入！您需要去商城购买更多的筹码！",{"取消","去购买"},function ( flag )
-                if flag then
-                    require("app.views.Store").new(self.parts["game"])
-                end
-            end)
+    
+    if event == 0 then
+        target:setScale(0.6)
+    elseif event == 3 or event == 2 then
+        target:setScale(0.7)
+    end
+    if event ~= 2 then return false end
+    utils.playSound("click")
+    dump(CONFIG.upDealer)
+    local inlist = false
+    for i,v in ipairs(CONFIG.upDealer) do
+        if v.mid ==USER.mid then
+            showAutoTip("您已经在排队中！请稍后！")
+            inlist = true
+            break
         end
+    end
+    if inlist then return end
+    if USER.gold > CONFIG.room100info[1]["min"] then
+        self.parts["buying"]:show()
+    else
+        showDialogTip("","您的金币不够带入！您需要去商城购买更多的筹码！",{"取消","去购买"},function ( flag )
+            if flag then
+                require("app.views.Store").new(self.parts["game"])
+            end
+        end)
     end
     self.parts["menu"]:getChildByTag(476):setVisible(false)
 end
@@ -355,6 +386,11 @@ function Menu:yourTrun()
         flag = true
     end
     self.parts["game"].parts["chat-layer"]:hide()
+
+    if self.parts["menuLayer"]:isVisible() then
+        flag = true
+    end
+    self.parts["menuLayer"]:setVisible(false)
 
     if self.parts["buying"].parts["sp"]:isVisible() then
         self.parts["buying"].parts["sp"]:setVisible(false)

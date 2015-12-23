@@ -15,6 +15,7 @@ function Seat:ctor(sp,id)
     local head = utils.makeAvatar()
     self.parts["seat"]:addChild(head,20)
     self.parts["head"]  = head 
+    head:setScale(0.8)
     head:setPosition(40,40)
     self:reset()
 end

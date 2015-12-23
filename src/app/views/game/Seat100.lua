@@ -62,12 +62,12 @@ function Seat:setCardsVisible(flag)
 end
 
 function Seat:changeChpin(gold)
-    dump(utils.numAbbrZh(gold))
+    -- dump(utils.numAbbrZh(gold))
     self.parts["chipin"]:setString(utils.numAbbrZh(gold))
 end
 
 function Seat:changeName(gold)
-    dump(type(gold))
+    -- dump(type(gold))
     if type(gold) == "string" then
         self.parts["total"]:setString(gold)
         return
@@ -109,6 +109,10 @@ function Seat:sit(udata)
     self:changePic(udata.icon)
     self:changeChpin(udata.chipin)
     self:changeName(udata.name)
+
+    if self.model.mid == USER.mid then
+        USER.seatid = 1
+    end
 end
 
 function Seat:showCard(cards,quick,callback)
@@ -143,6 +147,10 @@ end
 
 
 function Seat:stand( )
+    if self.model.mid == USER.mid then
+        USER.seatid = 0
+    end
+
     local baseId = self.model.baseId
     self.model = {
         mid = 0,

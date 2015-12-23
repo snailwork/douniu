@@ -65,6 +65,7 @@ function LoginManager.callback (data)
 		else
 			--登陆失败
 		end
+		dump("http.login" )
 		app:dispatchEvent({name = "http.login" , data = svflag})
 	end
 

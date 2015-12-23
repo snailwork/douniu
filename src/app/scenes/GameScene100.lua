@@ -11,7 +11,7 @@ local Interaction = require("app.views.game.Interaction")
 local Clock = require("app.views.game.Clock100")
 
 
-function GameScene:ctor(data)
+function GameScene:ctor()
    
     CONFIG.lType = 15
     require("app.views.LoadingLayer").new():addTo(self,919)
@@ -63,8 +63,9 @@ function GameScene:ctor(data)
         :pos(display.cx,display.cy)
         :addTo(layer,5)
     self.parts["seatPanel"]:zorder(6)
-    layer:getChildByTag(302):zorder(7)
-    self.parts["show_win"]:zorder(8)
+    layer:getChildByTag(376):zorder(7) --dealer
+    layer:getChildByTag(302):zorder(8) --menu
+    self.parts["show_win"]:zorder(9) --win界面
 
 	self.parts["event"] = GameEvent.new(self)
     self.parts["sysMsg"] = SysMsg.new(layer:getChildByTag(385))
@@ -228,18 +229,42 @@ end
 --
 function GameScene:showWin(data)
     if checkint(USER.seatid) == 1 then
-        data.win, data.meWin = data.meWin, data.win
+        -- data.win, data.meWin = data.meWin, data.win
+        local win = data.win
+        data.meWin  = win
+        data.win = -win
+
         self.parts["show_win"]:getChildByTag(3):setString("闲家")
     else
         self.parts["show_win"]:getChildByTag(3):setString("庄家")
     end
+    
+    USER.gold = USER.gold + data.meWin
+    app:dispatchEvent({name = "app.updatachip", nil})
+
     if data.meWin > 0 then
         self.parts["show_win"]:getChildByTag(800):loadTexture("room/win.png",1)
     else
         self.parts["show_win"]:getChildByTag(800):loadTexture("room/loser.png",1)
     end
-    self.parts["show_win"]:getChildByTag(2):setString(data.meWin)
-    self.parts["show_win"]:getChildByTag(4):setString(data.win)
+    dump(data)
+    local meWin = utils.numAbbrZh(data.meWin)
+    if data.meWin > 0 then
+        meWin = "+"..meWin
+    else
+        meWin = "-"..meWin
+    end
+    local win = utils.numAbbrZh(data.win)
+     if data.win > 0 then
+        win = "+"..win
+    else
+        win = "-"..win
+    end
+    dump(meWin)
+    dump(win)
+
+    self.parts["show_win"]:getChildByTag(2):setString(meWin)
+    self.parts["show_win"]:getChildByTag(4):setString(win)
     self.parts["show_win"]:setPositionY(200)
     self.parts["show_win"]:setOpacity(255)
     transition.moveTo(self.parts["show_win"],{
@@ -273,10 +298,10 @@ function GameScene:startDealCard(start)
         dataSort[#dataSort +1 ] = data[i]
     end
     data = dataSort
-
+    
     local batch = self.parts["batchChip"]
     local time,action
-    time = 0.5
+    time = 0.3
     start_point = cc.p(0,0)
    for i,v in ipairs(data) do
         performWithDelay(self,function (  )
