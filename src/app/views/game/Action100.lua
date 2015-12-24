@@ -5,6 +5,8 @@ function Action:ctor( game,action)
 	self.action_layer = action
     self.parts={}
     action:setPositionY(action:getPositionY() - (display.height - 720)/2)
+    action:getChildByTag(571):setString(utils.numAbbrZh(USER.gold))
+    
 
     for i=1,6 do
         self.parts[i] = action:getChildByTag(i)
