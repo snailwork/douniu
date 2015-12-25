@@ -152,6 +152,7 @@ function Menu:menuLayerFun2(target, event )
     self.parts["menuLayer"]:setVisible(false)
     SendCMD:stand()
 end
+
 --out
 function Menu:fun1(target, event )
     if not self:btnScale(target, event) then return end
@@ -160,10 +161,10 @@ function Menu:fun1(target, event )
     self.parts["menuLayer"]:setVisible(true)
     if checkint(USER.seatid) == 1 then
         self.parts["menuLayer"]:getChildByTag(1):getChildByTag(331):loadTexture("menu/back-dis.png",1)
-        self.parts["menuLayer"]:getChildByTag(2):getChildByTag(333):loadTexture("menu/change-dis.png",1)
+        self.parts["menuLayer"]:getChildByTag(2):getChildByTag(333):loadTexture("menu/stand-dis.png",1)
     else
         self.parts["menuLayer"]:getChildByTag(1):getChildByTag(331):loadTexture("menu/back-hall.png",1)
-        self.parts["menuLayer"]:getChildByTag(2):getChildByTag(333):loadTexture("menu/change-room.png",1)
+        self.parts["menuLayer"]:getChildByTag(2):getChildByTag(333):loadTexture("menu/stand.png",1)
     end
 end
 

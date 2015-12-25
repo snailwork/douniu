@@ -30,6 +30,7 @@
           <Image Name="back-dis.png" />
           <Image Name="change-dis.png" />
           <Image Name="stand.png" />
+          <Image Name="stand-dis.png" />
         </Folder>
         <Folder Name="seat">
           <Image Name="cardtype-bg.png" />
