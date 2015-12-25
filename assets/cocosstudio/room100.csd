@@ -1297,15 +1297,15 @@
                     <PrePosition X="0.4792" Y="0.2667" />
                     <PreSize X="0.7600" Y="0.3400" />
                     <Children>
-                      <NodeObjectData Name="Image_282_Copy" ActionTag="915266290" FrameEvent="" Tag="333" ObjectIndex="283" Scale9Width="50" Scale9Height="42" ctype="ImageViewObjectData">
-                        <Position X="22.0000" Y="25.0000" />
+                      <NodeObjectData Name="Image_282_Copy" ActionTag="915266290" FrameEvent="" Tag="333" ObjectIndex="283" Scale9Width="44" Scale9Height="42" ctype="ImageViewObjectData">
+                        <Position X="26.0000" Y="25.0000" />
                         <Scale ScaleX="1.0000" ScaleY="1.0000" />
                         <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                         <CColor A="255" R="255" G="255" B="255" />
-                        <Size X="50.0000" Y="42.0000" />
-                        <PrePosition X="0.1447" Y="0.4902" />
+                        <Size X="44.0000" Y="42.0000" />
+                        <PrePosition X="0.1711" Y="0.4902" />
                         <PreSize X="0.0000" Y="0.0000" />
-                        <FileData Type="MarkedSubImage" Path="menu/change-room.png" Plist="room.plist" />
+                        <FileData Type="MarkedSubImage" Path="menu/stand.png" Plist="room.plist" />
                       </NodeObjectData>
                       <NodeObjectData Name="change" ActionTag="-1236058328" FrameEvent="" Tag="334" ObjectIndex="180" FontSize="26" LabelText="站起" ctype="TextObjectData">
                         <Position X="110.0000" Y="28.0000" />

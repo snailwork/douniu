@@ -135,10 +135,10 @@ function LoadingLayer:loadRes(data)
 
 	local com = 0
 	local num = #data.plist + #data.png + #data.jpg
-
+	dump(num)
 	local asyc = function ( plist, image )
 		com =  com + 1 
-
+		dump(com)
 		if com == num then
 			self.loadingProgress = self.loadingProgress + 500
 			if self.loadingProgress == 800 then
@@ -152,8 +152,8 @@ function LoadingLayer:loadRes(data)
 	for i,v in ipairs(data.png) do
 		display.addImageAsync(v..".png",asyc)
 	end
-	data.jpg = data.jpg or {}
 	for i,v in ipairs(data.jpg) do
+		dump(v..".jpg")
 		display.addImageAsync(v..".jpg",asyc)
 	end
 end

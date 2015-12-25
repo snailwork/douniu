@@ -126,6 +126,7 @@
       <FilePathData Path="turntable/turn_hightlight.png" />
       <FilePathData Path="turntable/turn_point.png" />
       <FilePathData Path="turntable/zp2.png" />
+      <FilePathData Path="common/sys-tip.png" />
     </ImageFiles>
     <MaxSize Width="2048" Height="2048" />
   </Content>

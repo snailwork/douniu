@@ -27,6 +27,7 @@ function Action:showQiangZhuang(falg)
 end
 
 function Action:showNiu(falg)
+    if not self.room.parts["seats"][USER.seatid].parts["card1"].sp:isVisible() then return end
     self.parts["niu"]:setVisible(falg)
 end
 
@@ -34,8 +35,9 @@ function Action:showBei(falg)
     if not falg then
         self.parts["beiBtns"]:setVisible(falg)
         return
+    else
+        if not self.room.parts["seats"][USER.seatid].parts["card1"].sp:isVisible() then return end
     end
-    dump(self.parts["beiData"])
     for i=1,4 do
          self.parts["beiBtns"]:getChildByTag(i):setTitleText("X"..self.parts["beiData"][i])--getChildByTag(i):getChildByTag(1):setString(self.parts["data"][i])
     end
@@ -44,6 +46,7 @@ end
 
 function Action:showCalculate(falg)
     self.parts["data"] = {}
+    if not self.room.parts["seats"][USER.seatid].parts["card1"].sp:isVisible() then return end
     self:clearCalculate()
     self:showNiu(falg)
     self.parts["calculate"]:setVisible(falg)

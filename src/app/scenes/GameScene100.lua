@@ -145,6 +145,7 @@ function GameScene:addGold(data)
     local seat = self.parts["seatPanel"]:getChildByTag(data.seatid)
     local c 
     if data.mid  == USER.mid then
+        app:dispatchEvent({name = "app.updatachip", nil})
         local point = self.parts["batchAddChip"]:convertToNodeSpace(self.parts["seatPanel"]:getChildByTag(10):convertToWorldSpace(cc.p(40,-82)))
         local to_point = self.parts["batchAddChip"]:convertToNodeSpace(seat:convertToWorldSpace(cc.p(120,120)))
         c = Chip:new(point.x,point.y,self.parts["batchAddChip"])
@@ -229,25 +230,17 @@ end
 --
 function GameScene:showWin(data)
     if checkint(USER.seatid) == 1 then
-        -- data.win, data.meWin = data.meWin, data.win
-        local win = data.win
-        data.meWin  = win
-        data.win = -win
 
         self.parts["show_win"]:getChildByTag(3):setString("闲家")
     else
         self.parts["show_win"]:getChildByTag(3):setString("庄家")
     end
-    
-    USER.gold = USER.gold + data.meWin
-    app:dispatchEvent({name = "app.updatachip", nil})
 
     if data.meWin > 0 then
         self.parts["show_win"]:getChildByTag(800):loadTexture("room/win.png",1)
     else
         self.parts["show_win"]:getChildByTag(800):loadTexture("room/loser.png",1)
     end
-    dump(data)
     local meWin = utils.numAbbrZh(data.meWin)
     if data.meWin > 0 then
         meWin = "+"..meWin
@@ -260,9 +253,6 @@ function GameScene:showWin(data)
     else
         win = "-"..win
     end
-    dump(meWin)
-    dump(win)
-
     self.parts["show_win"]:getChildByTag(2):setString(meWin)
     self.parts["show_win"]:getChildByTag(4):setString(win)
     self.parts["show_win"]:setPositionY(200)

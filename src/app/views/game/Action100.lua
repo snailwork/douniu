@@ -20,6 +20,7 @@ function Action:ctor( game,action)
     end
     action:getChildByTag(571):setString(utils.numAbbrZh(USER.gold))
     self.handler = app:addEventListener("app.updatachip", function(event)
+        dump(USER.gold)
             action:getChildByTag(571):setString(utils.numAbbrZh(USER.gold))
         end)
 end

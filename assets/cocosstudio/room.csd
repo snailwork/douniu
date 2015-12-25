@@ -1294,7 +1294,7 @@
             <EndColor A="255" R="255" G="255" B="255" />
             <ColorVector ScaleY="1.0000" />
           </NodeObjectData>
-          <NodeObjectData Name="menu_layer" ActionTag="808440364" FrameEvent="" Tag="302" ObjectIndex="43" BackColorAlpha="102" ColorAngle="90.0000" ctype="PanelObjectData">
+          <NodeObjectData Name="menu_layer" CanEdit="False" ActionTag="808440364" FrameEvent="" Tag="302" ObjectIndex="43" BackColorAlpha="102" ColorAngle="90.0000" ctype="PanelObjectData">
             <Position X="640.0000" Y="360.0000" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />

@@ -1,5 +1,5 @@
 <GameProjectFile>
-  <PropertyGroup Type="Layer" Name="hall" ID="3bddf330-35ca-4598-b8fb-4ba32a6423e7" Version="2.0.6.0" />
+  <PropertyGroup Type="Layer" Name="hall-" ID="3bddf330-35ca-4598-b8fb-4ba32a6423e7" Version="2.0.6.0" />
   <Content ctype="GameProjectContent">
     <Content>
       <Animation Duration="0" Speed="1.0000" />
@@ -46,12 +46,12 @@
             <PreSize X="1.3425" Y="0.9333" />
             <Children>
               <NodeObjectData Name="title" ActionTag="2081875461" FrameEvent="" Tag="163" ObjectIndex="1" LabelText="在线玩家" ctype="TextBMFontObjectData">
-                <Position X="202.0000" Y="416.0000" />
+                <Position X="211.0000" Y="422.0000" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                 <CColor A="255" R="255" G="255" B="255" />
                 <Size X="138.0000" Y="43.0000" />
-                <PrePosition X="0.4687" Y="0.9183" />
+                <PrePosition X="0.4896" Y="0.9316" />
                 <PreSize X="0.0000" Y="0.0000" />
                 <LabelBMFontFile_CNB Type="Normal" Path="fonts/wuse.fnt" />
               </NodeObjectData>
@@ -110,45 +110,6 @@
             </Children>
             <FileData Type="MarkedSubImage" Path="hall/online-bg.png" Plist="room.plist" />
           </NodeObjectData>
-          <NodeObjectData Name="btn_close" ActionTag="1362832518" FrameEvent="" Tag="1" ObjectIndex="1" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="40" Scale9OriginY="10" Scale9Width="146" Scale9Height="422" ctype="ButtonObjectData">
-            <Position X="619.4066" Y="337.3500" />
-            <Scale ScaleX="1.0000" ScaleY="1.0000" />
-            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <CColor A="255" R="255" G="255" B="255" />
-            <Size X="226.0000" Y="442.0000" />
-            <PrePosition X="0.4839" Y="0.4685" />
-            <PreSize X="0.3382" Y="0.1758" />
-            <TextColor A="255" R="255" G="255" B="255" />
-            <DisabledFileData Type="MarkedSubImage" Path="hall/tab1.png" Plist="room.plist" />
-            <PressedFileData Type="MarkedSubImage" Path="hall/tab1.png" Plist="room.plist" />
-            <NormalFileData Type="MarkedSubImage" Path="hall/tab1.png" Plist="room.plist" />
-          </NodeObjectData>
-          <NodeObjectData Name="quickstart" ActionTag="934086492" FrameEvent="" Tag="2" ObjectIndex="2" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="40" Scale9OriginY="10" Scale9Width="146" Scale9Height="422" ctype="ButtonObjectData">
-            <Position X="878.9066" Y="337.3500" />
-            <Scale ScaleX="1.0000" ScaleY="1.0000" />
-            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <CColor A="255" R="255" G="255" B="255" />
-            <Size X="226.0000" Y="442.0000" />
-            <PrePosition X="0.6866" Y="0.4685" />
-            <PreSize X="0.3382" Y="0.1758" />
-            <TextColor A="255" R="255" G="255" B="255" />
-            <DisabledFileData Type="MarkedSubImage" Path="hall/tab2.png" Plist="room.plist" />
-            <PressedFileData Type="MarkedSubImage" Path="hall/tab2.png" Plist="room.plist" />
-            <NormalFileData Type="MarkedSubImage" Path="hall/tab2.png" Plist="room.plist" />
-          </NodeObjectData>
-          <NodeObjectData Name="quickstart_Copy" ActionTag="-748000897" FrameEvent="" Tag="3" ObjectIndex="9" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="40" Scale9OriginY="10" Scale9Width="146" Scale9Height="422" ctype="ButtonObjectData">
-            <Position X="1138.4066" Y="337.3500" />
-            <Scale ScaleX="1.0000" ScaleY="1.0000" />
-            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-            <CColor A="255" R="255" G="255" B="255" />
-            <Size X="226.0000" Y="442.0000" />
-            <PrePosition X="0.8894" Y="0.4685" />
-            <PreSize X="0.3382" Y="0.1758" />
-            <TextColor A="255" R="255" G="255" B="255" />
-            <DisabledFileData Type="MarkedSubImage" Path="hall/tab3.png" Plist="room.plist" />
-            <PressedFileData Type="MarkedSubImage" Path="hall/tab3.png" Plist="room.plist" />
-            <NormalFileData Type="MarkedSubImage" Path="hall/tab3.png" Plist="room.plist" />
-          </NodeObjectData>
           <NodeObjectData Name="menu" ActionTag="-698357661" FrameEvent="" Tag="508" ObjectIndex="36" Scale9Enable="True" LeftEage="150" RightEage="150" Scale9OriginX="150" Scale9Width="9" Scale9Height="49" ctype="ImageViewObjectData">
             <Position X="640.0000" Y="25.0000" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
@@ -157,159 +118,95 @@
             <Size X="1236.0000" Y="49.0000" />
             <PrePosition X="0.5000" Y="0.0347" />
             <PreSize X="0.9656" Y="0.0681" />
+            <FileData Type="MarkedSubImage" Path="hall/menu-bg.png" Plist="room.plist" />
+          </NodeObjectData>
+          <NodeObjectData Name="activity" ActionTag="-1128775684" FrameEvent="" Tag="3" ObjectIndex="15" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="36" Scale9OriginY="10" Scale9Width="4" Scale9Height="66" ctype="ButtonObjectData">
+            <Position X="845.9066" Y="50.3500" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <Size X="76.0000" Y="86.0000" />
+            <PrePosition X="0.6844" Y="1.0276" />
+            <PreSize X="0.3382" Y="0.1758" />
             <Children>
-              <NodeObjectData Name="btn_close_Copy" ActionTag="1431533597" FrameEvent="" Tag="9" ObjectIndex="11" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="36" Scale9OriginY="10" Scale9Width="4" Scale9Height="66" ctype="ButtonObjectData">
-                <Position X="201.4066" Y="50.3500" />
+              <NodeObjectData Name="BitmapFontLabel_12_Copy" ActionTag="-376872690" FrameEvent="" Tag="131" ObjectIndex="13" LabelText="活动" ctype="TextBMFontObjectData">
+                <Position X="95.0000" Y="17.5000" />
                 <Scale ScaleX="1.0000" ScaleY="1.0000" />
                 <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
                 <CColor A="255" R="255" G="255" B="255" />
-                <Size X="76.0000" Y="86.0000" />
-                <PrePosition X="0.1630" Y="1.0276" />
-                <PreSize X="0.3382" Y="0.1758" />
-                <Children>
-                  <NodeObjectData Name="BitmapFontLabel_12_Copy" ActionTag="1801035421" FrameEvent="" Tag="135" ObjectIndex="17" LabelText="排行" ctype="TextBMFontObjectData">
-                    <Position X="91.0000" Y="17.5000" />
-                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <CColor A="255" R="255" G="255" B="255" />
-                    <Size X="54.0000" Y="43.0000" />
-                    <PrePosition X="1.1974" Y="0.2035" />
-                    <PreSize X="0.0000" Y="0.0000" />
-                    <LabelBMFontFile_CNB Type="Normal" Path="fonts/wuse.fnt" />
-                  </NodeObjectData>
-                </Children>
-                <TextColor A="255" R="255" G="255" B="255" />
-                <DisabledFileData Type="MarkedSubImage" Path="hall/ranking.png" Plist="room.plist" />
-                <PressedFileData Type="MarkedSubImage" Path="hall/ranking.png" Plist="room.plist" />
-                <NormalFileData Type="MarkedSubImage" Path="hall/ranking.png" Plist="room.plist" />
-              </NodeObjectData>
-              <NodeObjectData Name="btn_close_Copy_Copy" ActionTag="22134470" FrameEvent="" Tag="4" ObjectIndex="12" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="36" Scale9OriginY="10" Scale9Width="4" Scale9Height="66" ctype="ButtonObjectData">
-                <Position X="1068.4066" Y="50.3500" />
-                <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <CColor A="255" R="255" G="255" B="255" />
-                <Size X="76.0000" Y="86.0000" />
-                <PrePosition X="0.8644" Y="1.0276" />
-                <PreSize X="0.3382" Y="0.1758" />
-                <Children>
-                  <NodeObjectData Name="BitmapFontLabel_12_Copy" ActionTag="-453824362" FrameEvent="" Tag="134" ObjectIndex="16" LabelText="商城" ctype="TextBMFontObjectData">
-                    <Position X="101.0000" Y="17.5000" />
-                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <CColor A="255" R="255" G="255" B="255" />
-                    <Size X="54.0000" Y="43.0000" />
-                    <PrePosition X="1.3289" Y="0.2035" />
-                    <PreSize X="0.0000" Y="0.0000" />
-                    <LabelBMFontFile_CNB Type="Normal" Path="fonts/wuse.fnt" />
-                  </NodeObjectData>
-                </Children>
-                <TextColor A="255" R="255" G="255" B="255" />
-                <DisabledFileData Type="MarkedSubImage" Path="hall/shop.png" Plist="room.plist" />
-                <PressedFileData Type="MarkedSubImage" Path="hall/shop.png" Plist="room.plist" />
-                <NormalFileData Type="MarkedSubImage" Path="hall/shop.png" Plist="room.plist" />
-              </NodeObjectData>
-              <NodeObjectData Name="btn_close_Copy_Copy_0" ActionTag="1917247449" FrameEvent="" Tag="5" ObjectIndex="13" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="36" Scale9OriginY="10" Scale9Width="4" Scale9Height="66" ctype="ButtonObjectData">
-                <Position X="882.2067" Y="50.3500" />
-                <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <CColor A="255" R="255" G="255" B="255" />
-                <Size X="76.0000" Y="86.0000" />
-                <PrePosition X="0.7138" Y="1.0276" />
-                <PreSize X="0.3382" Y="0.1758" />
-                <Children>
-                  <NodeObjectData Name="BitmapFontLabel_12_Copy" ActionTag="497493336" FrameEvent="" Tag="133" ObjectIndex="15" LabelText="更多" ctype="TextBMFontObjectData">
-                    <Position X="101.0000" Y="17.5000" />
-                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <CColor A="255" R="255" G="255" B="255" />
-                    <Size X="54.0000" Y="43.0000" />
-                    <PrePosition X="1.3289" Y="0.2035" />
-                    <PreSize X="0.0000" Y="0.0000" />
-                    <LabelBMFontFile_CNB Type="Normal" Path="fonts/wuse.fnt" />
-                  </NodeObjectData>
-                </Children>
-                <TextColor A="255" R="255" G="255" B="255" />
-                <DisabledFileData Type="MarkedSubImage" Path="hall/more.png" Plist="room.plist" />
-                <PressedFileData Type="MarkedSubImage" Path="hall/more.png" Plist="room.plist" />
-                <NormalFileData Type="MarkedSubImage" Path="hall/more.png" Plist="room.plist" />
-              </NodeObjectData>
-              <NodeObjectData Name="btn_close_Copy_Copy_0_Copy" ActionTag="-762962480" FrameEvent="" Tag="7" ObjectIndex="14" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="36" Scale9OriginY="10" Scale9Width="4" Scale9Height="66" ctype="ButtonObjectData">
-                <Position X="573.8066" Y="50.3500" />
-                <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <CColor A="255" R="255" G="255" B="255" />
-                <Size X="76.0000" Y="86.0000" />
-                <PrePosition X="0.4642" Y="1.0276" />
-                <PreSize X="0.3382" Y="0.1758" />
-                <Children>
-                  <NodeObjectData Name="BitmapFontLabel_12_Copy" ActionTag="1863912773" FrameEvent="" Tag="132" ObjectIndex="14" LabelText="银行" ctype="TextBMFontObjectData">
-                    <Position X="96.0000" Y="17.5000" />
-                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <CColor A="255" R="255" G="255" B="255" />
-                    <Size X="54.0000" Y="43.0000" />
-                    <PrePosition X="1.2632" Y="0.2035" />
-                    <PreSize X="0.0000" Y="0.0000" />
-                    <LabelBMFontFile_CNB Type="Normal" Path="fonts/wuse.fnt" />
-                  </NodeObjectData>
-                </Children>
-                <TextColor A="255" R="255" G="255" B="255" />
-                <DisabledFileData Type="MarkedSubImage" Path="hall/bank.png" Plist="room.plist" />
-                <PressedFileData Type="MarkedSubImage" Path="hall/bank.png" Plist="room.plist" />
-                <NormalFileData Type="MarkedSubImage" Path="hall/bank.png" Plist="room.plist" />
-              </NodeObjectData>
-              <NodeObjectData Name="btn_close_Copy_Copy_0_Copy_Copy" ActionTag="-1128775684" FrameEvent="" Tag="8" ObjectIndex="15" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="36" Scale9OriginY="10" Scale9Width="4" Scale9Height="66" ctype="ButtonObjectData">
-                <Position X="387.6066" Y="50.3500" />
-                <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <CColor A="255" R="255" G="255" B="255" />
-                <Size X="76.0000" Y="86.0000" />
-                <PrePosition X="0.3136" Y="1.0276" />
-                <PreSize X="0.3382" Y="0.1758" />
-                <Children>
-                  <NodeObjectData Name="BitmapFontLabel_12_Copy" ActionTag="-376872690" FrameEvent="" Tag="131" ObjectIndex="13" LabelText="活动" ctype="TextBMFontObjectData">
-                    <Position X="95.0000" Y="17.5000" />
-                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <CColor A="255" R="255" G="255" B="255" />
-                    <Size X="53.0000" Y="43.0000" />
-                    <PrePosition X="1.2500" Y="0.2035" />
-                    <PreSize X="0.0000" Y="0.0000" />
-                    <LabelBMFontFile_CNB Type="Normal" Path="fonts/wuse.fnt" />
-                  </NodeObjectData>
-                </Children>
-                <TextColor A="255" R="255" G="255" B="255" />
-                <DisabledFileData Type="MarkedSubImage" Path="hall/activity.png" Plist="room.plist" />
-                <PressedFileData Type="MarkedSubImage" Path="hall/activity.png" Plist="room.plist" />
-                <NormalFileData Type="MarkedSubImage" Path="hall/activity.png" Plist="room.plist" />
-              </NodeObjectData>
-              <NodeObjectData Name="btn_close_Copy_Copy_0_Copy_Copy_Copy" ActionTag="-2114586851" FrameEvent="" Tag="6" ObjectIndex="16" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="22" Scale9OriginY="10" Scale9Width="18" Scale9Height="51" ctype="ButtonObjectData">
-                <Position X="728.0067" Y="42.8500" />
-                <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                <CColor A="255" R="255" G="255" B="255" />
-                <Size X="62.0000" Y="71.0000" />
-                <PrePosition X="0.5890" Y="0.8745" />
-                <PreSize X="0.3382" Y="0.1758" />
-                <Children>
-                  <NodeObjectData Name="BitmapFontLabel_12" ActionTag="-1541599372" FrameEvent="" Tag="525" ObjectIndex="12" LabelText="任务" ctype="TextBMFontObjectData">
-                    <Position X="85.0000" Y="17.5000" />
-                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
-                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
-                    <CColor A="255" R="255" G="255" B="255" />
-                    <Size X="54.0000" Y="43.0000" />
-                    <PrePosition X="1.3710" Y="0.2465" />
-                    <PreSize X="0.0000" Y="0.0000" />
-                    <LabelBMFontFile_CNB Type="Normal" Path="fonts/wuse.fnt" />
-                  </NodeObjectData>
-                </Children>
-                <TextColor A="255" R="255" G="255" B="255" />
-                <DisabledFileData Type="MarkedSubImage" Path="menu/btn-task.png" Plist="room.plist" />
-                <PressedFileData Type="MarkedSubImage" Path="menu/btn-task.png" Plist="room.plist" />
-                <NormalFileData Type="MarkedSubImage" Path="menu/btn-task.png" Plist="room.plist" />
+                <Size X="53.0000" Y="43.0000" />
+                <PrePosition X="1.2500" Y="0.2035" />
+                <PreSize X="0.0000" Y="0.0000" />
+                <LabelBMFontFile_CNB Type="Normal" Path="fonts/wuse.fnt" />
               </NodeObjectData>
             </Children>
-            <FileData Type="MarkedSubImage" Path="hall/menu-bg.png" Plist="room.plist" />
+            <TextColor A="255" R="255" G="255" B="255" />
+            <DisabledFileData Type="MarkedSubImage" Path="hall/activity.png" Plist="room.plist" />
+            <PressedFileData Type="MarkedSubImage" Path="hall/activity.png" Plist="room.plist" />
+            <NormalFileData Type="MarkedSubImage" Path="hall/activity.png" Plist="room.plist" />
+          </NodeObjectData>
+          <NodeObjectData Name="bank" ActionTag="-762962480" FrameEvent="" Tag="2" ObjectIndex="14" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="36" Scale9OriginY="10" Scale9Width="4" Scale9Height="66" ctype="ButtonObjectData">
+            <Position X="609.1566" Y="50.3500" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <Size X="76.0000" Y="86.0000" />
+            <PrePosition X="0.4928" Y="1.0276" />
+            <PreSize X="0.3382" Y="0.1758" />
+            <Children>
+              <NodeObjectData Name="BitmapFontLabel_12_Copy" ActionTag="1863912773" FrameEvent="" Tag="132" ObjectIndex="14" LabelText="银行" ctype="TextBMFontObjectData">
+                <Position X="96.0000" Y="17.5000" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <Size X="54.0000" Y="43.0000" />
+                <PrePosition X="1.2632" Y="0.2035" />
+                <PreSize X="0.0000" Y="0.0000" />
+                <LabelBMFontFile_CNB Type="Normal" Path="fonts/wuse.fnt" />
+              </NodeObjectData>
+            </Children>
+            <TextColor A="255" R="255" G="255" B="255" />
+            <DisabledFileData Type="MarkedSubImage" Path="hall/bank.png" Plist="room.plist" />
+            <PressedFileData Type="MarkedSubImage" Path="hall/bank.png" Plist="room.plist" />
+            <NormalFileData Type="MarkedSubImage" Path="hall/bank.png" Plist="room.plist" />
+          </NodeObjectData>
+          <NodeObjectData Name="rank" ActionTag="1431533597" FrameEvent="" Tag="1" ObjectIndex="11" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="36" Scale9OriginY="10" Scale9Width="4" Scale9Height="66" ctype="ButtonObjectData">
+            <Position X="372.4066" Y="50.3500" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <Size X="76.0000" Y="86.0000" />
+            <PrePosition X="0.3013" Y="1.0276" />
+            <PreSize X="0.3382" Y="0.1758" />
+            <Children>
+              <NodeObjectData Name="BitmapFontLabel_12_Copy" ActionTag="1801035421" FrameEvent="" Tag="135" ObjectIndex="17" LabelText="排行" ctype="TextBMFontObjectData">
+                <Position X="91.0000" Y="17.5000" />
+                <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                <CColor A="255" R="255" G="255" B="255" />
+                <Size X="54.0000" Y="43.0000" />
+                <PrePosition X="1.1974" Y="0.2035" />
+                <PreSize X="0.0000" Y="0.0000" />
+                <LabelBMFontFile_CNB Type="Normal" Path="fonts/wuse.fnt" />
+              </NodeObjectData>
+            </Children>
+            <TextColor A="255" R="255" G="255" B="255" />
+            <DisabledFileData Type="MarkedSubImage" Path="hall/ranking.png" Plist="room.plist" />
+            <PressedFileData Type="MarkedSubImage" Path="hall/ranking.png" Plist="room.plist" />
+            <NormalFileData Type="MarkedSubImage" Path="hall/ranking.png" Plist="room.plist" />
+          </NodeObjectData>
+          <NodeObjectData Name="game" ActionTag="-748000897" FrameEvent="" Tag="4" ObjectIndex="9" TouchEnable="True" FontSize="30" ButtonText="" LeftEage="40" RightEage="40" TopEage="10" BottomEage="10" Scale9OriginX="40" Scale9OriginY="10" Scale9Width="146" Scale9Height="422" ctype="ButtonObjectData">
+            <Position X="882.4066" Y="342.3500" />
+            <Scale ScaleX="1.0000" ScaleY="1.0000" />
+            <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+            <CColor A="255" R="255" G="255" B="255" />
+            <Size X="226.0000" Y="442.0000" />
+            <PrePosition X="0.6894" Y="0.4755" />
+            <PreSize X="0.3382" Y="0.1758" />
+            <TextColor A="255" R="255" G="255" B="255" />
+            <DisabledFileData Type="MarkedSubImage" Path="hall/tab3.png" Plist="room.plist" />
+            <PressedFileData Type="MarkedSubImage" Path="hall/tab3.png" Plist="room.plist" />
+            <NormalFileData Type="MarkedSubImage" Path="hall/tab3.png" Plist="room.plist" />
           </NodeObjectData>
         </Children>
       </ObjectData>

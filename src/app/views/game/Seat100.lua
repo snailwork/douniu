@@ -63,6 +63,7 @@ end
 
 function Seat:changeChpin(gold)
     -- dump(utils.numAbbrZh(gold))
+    self.model.chipin = gold
     self.parts["chipin"]:setString(utils.numAbbrZh(gold))
 end
 

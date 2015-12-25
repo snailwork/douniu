@@ -542,7 +542,7 @@ function ParseSocket:fun1061(packet,cmd)
 			packet:readInt()
 			packet:readInt()
 			local num11 = packet:readInt()
-			for i=1,num11 do
+			for j=1,num11 do
 				packet:readInt()
 				packet:readLongInt()
 				packet:readLongInt()
@@ -553,20 +553,32 @@ function ParseSocket:fun1061(packet,cmd)
 				win = packet:readInt() --谁赢 0是庄赢 1是闲家赢
 			}
 			local num1 = packet:readInt()
-			for i=1,num1 do
+			for j=1,num1 do
 				local mid = packet:readInt()
 				local win = packet:readLongInt()
 				local gold = packet:readLongInt()
+
 				if mid == USER.mid then
 					data.meWin = data.meWin + win
 					data.gold = gold
 				end
+				-- data[mid] = gold
 				data.win = data.win + win
 			end
 		end
 	end
-	
-	data.win = -data.win
+	if checkint(USER.seatid) == 1 then
+        local win = data.win
+        data.meWin  = -win
+    else
+		data.win = -data.win
+    end
+
+    dump(USER.gold )
+    USER.gold = USER.gold + data.meWin
+    app:dispatchEvent({name = "app.updatachip", nil})
+    dump(USER.gold )
+
 	dump(data)
 	self.socketEvent:dispatchEvent({name = cmd,data = data})
 end

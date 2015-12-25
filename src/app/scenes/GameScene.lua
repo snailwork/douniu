@@ -241,7 +241,7 @@ function GameScene:moveToSeat(seatid,to_seatid,callback)
     -- local to_seat = self.parts["seatPanel"]:getChildByTag(to_seatid)
     local point = self.parts["batchChip"]:convertToNodeSpace(seat:convertToWorldSpace(cc.p(120,120)))
     local to_point = self.parts["batchChip"]:convertToNodeSpace(to_seat:convertToWorldSpace(cc.p(120,120)))
-    local t,action = 0.4
+    local t,action = 0.3
     local distance = cc.pGetDistance(point,to_point)
     local num = math.random(15,30)
     if distance < 400 then
@@ -254,7 +254,7 @@ function GameScene:moveToSeat(seatid,to_seatid,callback)
         -- to_point.y = to_point.y + math.random(-10,10)
         action = transition.sequence({
                     -- cc.DelayTime:create(( i ) * 0.03 ),
-                    cc.FadeIn:create(( i ) * 0.03),
+                    cc.FadeIn:create(( i ) * 0.02),
                     cc.Spawn:create({
                         transition.newEasing(cc.MoveTo:create(t,to_point),"OUT"),
                         transition.sequence({

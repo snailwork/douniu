@@ -119,7 +119,7 @@ function GameEvent:fun1002(data)
 			end
 			if data.status and data.status == 2 then
 				self.room.parts["action"]:startChipin()
-				self.room.parts["clock"]:start(15,function ( )
+				self.room.parts["clock"]:start(10,function ( )
 					self.room.parts["action"]:stopChipin()
 					end)
 			end
@@ -236,6 +236,7 @@ function GameEvent:fun1104(data)
 	self.room:setDealer(data.dealer)
 	self.dealer = data.dealer
 	-- dump(self.dealer)
+	self.room.parts["clock"]:stop()
 	for k,v in pairs(self.room.parts["seats"]) do --抢庄图标消失
 		v.parts["qiangZhuang"]:setVisible(false)
 	end
@@ -261,6 +262,7 @@ function GameEvent:fun1105(data)
 	local data = data.data
 	self.room.parts["seats"][data.seatid]:changeBei(data.bei)
 	if data.seatid == USER.seatid then
+		self.room.parts["clock"]:stop()
 		self.room.parts["action"]:showBei(false)
 	end
 end
@@ -281,9 +283,11 @@ end
 function GameEvent:fun1107(data)
 	local data = data.data
 	dump(data,"",5)
+
 	self.room.parts["seats"][data.seatid]:showCard(1,5,data.cards)
 	self.room.parts["seats"][data.seatid]:showNiuType(data.ctype)
 	if data.seatid == USER.seatid then
+		self.room.parts["clock"]:stop()
 		self.room.parts["action"]:showCalculate(false)
 	end
 end
@@ -399,12 +403,12 @@ function GameEvent:fun1109(data)
 		if data.gameStatus >= 2 then
 			if v.seatid ~= data.dealer then
 				if v.bei == 0 then
-					if v.seatid == USER.seatid and data.dealer ~= USER.seatid then
-						self.room.parts["action"]:showBei(true)
-						self.room.parts["clock"]:start(10,function ( )
-							self.room.parts["action"]:showBei(false)
-						end)
-					end
+					-- if v.seatid == USER.seatid and data.dealer ~= USER.seatid then
+					-- 	self.room.parts["action"]:showBei(true)
+					-- 	self.room.parts["clock"]:start(10,function ( )
+					-- 		self.room.parts["action"]:showBei(false)
+					-- 	end)
+					-- end
 				else
 					seats[v.seatid]:changeBei(v.bei)
 				end
@@ -455,9 +459,10 @@ function GameEvent:fun1062(data)
 	if start == 0 then
 		start = 5
 	end
-	self.room.parts["action"]:stopChipin()
+	-- self.room.parts["action"]:stopChipin()
 	self.room:startDealCard(start)
 end
+
 --结算
 function GameEvent:fun1061(data)
 	local data = data.data
@@ -466,14 +471,14 @@ function GameEvent:fun1061(data)
 	for i,v in ipairs(data) do
 		his[i] = v.win 
 	end
+	dump(self.room.parts["seats"][1].model)
+	self.room.parts["seats"][1]:changeChpin(self.room.parts["seats"][1].model.chipin + data.win )
 	if #self.room.parts["his"] > 10 then
 		table.remove(self.room.parts["his"],1)
 	end
 	table.insert(self.room.parts["his"],his)
-	
-	
-	
 end
+
 --游戏结束
 function GameEvent:fun1026(data)
 	for i,v in ipairs(self.room.parts["seats"]) do
@@ -498,7 +503,7 @@ end
 
 --开始摇骰子
 function GameEvent:fun1058(data)
-	
+	self.room.parts["action"]:stopChipin()
 	self.room:startDice()
 end
 
@@ -515,12 +520,12 @@ end
 
 --开始下注
 function GameEvent:fun1056(data)
-	if checkint(USER.seatid == 1) then
-			self.room.parts["clock"]:start(15)
+	if checkint(USER.seatid) == 1 then
+			self.room.parts["clock"]:start(10)
 		return
 	end
 	self.room.parts["action"]:startChipin()
-	self.room.parts["clock"]:start(15,function ( )
+	self.room.parts["clock"]:start(10,function ( )
 		self.room.parts["action"]:stopChipin()
 		end)
 end
@@ -624,6 +629,7 @@ function GameEvent:fun1902(data)
 	local data = data.data
 	for i,v in ipairs(self.room.parts["users"]) do
 		if v.mid == data.mid then
+			v.seatid = nil
 			self.room.parts["seats_"][data.seatid]:stand()
 			break
 		end
@@ -635,6 +641,7 @@ function GameEvent:fun1901(data)
 	local data = data.data
 	for i,v in ipairs(self.room.parts["users"]) do
 		if v.mid == data.mid then
+			v.seatid = data.seatid
 			data.name = v.name
 			data.icon = v.icon
 			break

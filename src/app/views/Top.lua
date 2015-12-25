@@ -6,7 +6,7 @@ function Top:ctor(sp,prant)
     self.parts["prant"] = prant
     local vals = {"LV:"..USER.level,USER.name,USER.gold}
     for i=1,7 do
-        if i < 3 then
+        if i <= 3 then
             sp:getChildByTag(i):setString(vals[i])
         else
             sp:getChildByTag(i):addTouchEventListener(handler(self, self["fun"..i]))
@@ -43,6 +43,14 @@ function Top:ctor(sp,prant)
 end
 
 function Top:hide()
+    dump("Top:hide()")
+    dump("Top:hide()")
+    dump("Top:hide()")
+    dump("Top:hide()")
+    dump("Top:hide()")
+    dump("Top:hide()")
+    dump("Top:hide()")
+    dump("Top:hide()")
     app:removeEventListener(self.handler)
     app:removeEventListener(self.handlerUpic)
     self.parts["top"]:removeSelf()

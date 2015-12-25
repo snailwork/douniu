@@ -128,7 +128,6 @@ function Seat:showCard(from,to,val,quick,callback)
     end
     if to >= 5 then to = 5 end
     for i=from,to do
-        dump(self.parts["card"..i].value_str)
         if cards[i] and "-" ~= cards[i] and cards[i] ~= self.parts["card"..i].value_str then
             self.parts["card"..i]:changeVal(cards[i],quick)
             if i == to and callback then

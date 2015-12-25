@@ -29,6 +29,7 @@
           <Image Name="px.png" />
           <Image Name="back-dis.png" />
           <Image Name="change-dis.png" />
+          <Image Name="stand.png" />
         </Folder>
         <Folder Name="seat">
           <Image Name="cardtype-bg.png" />
@@ -143,6 +144,7 @@
           <Image Name="dialog-bg.png" />
           <Image Name="light.png" />
           <Image Name="second-bg.png" />
+          <Image Name="sys-tip.png" />
         </Folder>
         <Project Name="top.csd" />
         <Project Name="roomlist.csd" />
@@ -410,6 +412,8 @@
           <Image Name="updealer.png" />
           <Image Name="head-mask.png" />
         </Folder>
+        <Project Name="hall-.csd" />
+        <Project Name="setting-.csd" />
       </RootFolder>
     </Group>
   </SolutionFolder>

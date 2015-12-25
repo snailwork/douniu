@@ -189,6 +189,7 @@
       <FilePathData Path="buying/add.png" />
       <FilePathData Path="buying/subtract.png" />
       <FilePathData Path="room/bg1.png" />
+      <FilePathData Path="menu/stand.png" />
     </ImageFiles>
     <MaxSize Width="2048" Height="2048" />
   </Content>

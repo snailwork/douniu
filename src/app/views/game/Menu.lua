@@ -97,7 +97,7 @@ end
 --退出
 function Menu:menuLayerFun1(target, event )
     if not self:btnScale(target, event) then return end
-    if self.parts["game"].gameStatus == 1 then
+    if self.parts["game"].parts["seats"][USER.seatid].parts["card1"].sp:isVisible() then
         showAutoTip("游戏正在进行中，不能退出房间！")
         return
     end
@@ -107,7 +107,7 @@ end
 --换桌
 function Menu:menuLayerFun2(target, event )
     if not self:btnScale(target, event) then return end
-    if self.parts["game"].gameStatus == 1 then
+    if self.parts["game"].parts["seats"][USER.seatid].parts["card1"].sp:isVisible() then
         showAutoTip("游戏正在进行中，不能切换房间！")
         return
     end
@@ -141,13 +141,11 @@ function Menu:fun6(target, event )
 end
 
 
-
-
 --show menuLayer
 function Menu:fun1(target, event )
     if not self:btnScale(target, event) then return end
     self.parts["menuLayer"]:setVisible(true)
-    if self.parts["game"].gameStatus == 1 then
+    if self.parts["game"].parts["seats"][USER.seatid].parts["card1"].sp:isVisible() then
         self.parts["menuLayer"]:getChildByTag(1):getChildByTag(331):loadTexture("menu/back-dis.png",1)
         self.parts["menuLayer"]:getChildByTag(2):getChildByTag(333):loadTexture("menu/change-dis.png",1)
     else

@@ -12,7 +12,7 @@
         <PrePosition X="0.0000" Y="0.0000" />
         <PreSize X="0.0000" Y="0.0000" />
         <Children>
-          <NodeObjectData Name="bg" ActionTag="-1" FrameEvent="" Tag="68" TouchEnable="True" BackColorAlpha="127" ColorAngle="270.0000" Scale9Width="1280" Scale9Height="853" ctype="PanelObjectData">
+          <NodeObjectData Name="bg" CanEdit="False" ActionTag="-1" FrameEvent="" Tag="68" TouchEnable="True" BackColorAlpha="127" ColorAngle="270.0000" Scale9Width="1280" Scale9Height="853" ctype="PanelObjectData">
             <Position X="640.0000" Y="361.0000" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
@@ -92,13 +92,13 @@
             <PressedFileData Type="MarkedSubImage" Path="roomlist/quickstart.png" Plist="room.plist" />
             <NormalFileData Type="MarkedSubImage" Path="roomlist/quickstart.png" Plist="room.plist" />
           </NodeObjectData>
-          <NodeObjectData Name="title" ActionTag="2081875461" FrameEvent="" Tag="163" ObjectIndex="1" LabelText="抢庄" ctype="TextBMFontObjectData">
-            <Position X="626.0000" Y="506.5000" />
+          <NodeObjectData Name="title" ActionTag="2081875461" FrameEvent="" Tag="163" ObjectIndex="1" LabelText="看牌抢庄" ctype="TextBMFontObjectData">
+            <Position X="632.0000" Y="545.5000" />
             <Scale ScaleX="1.0000" ScaleY="1.0000" />
             <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
             <CColor A="255" R="255" G="255" B="255" />
             <Size X="84.0000" Y="43.0000" />
-            <PrePosition X="0.4891" Y="0.7035" />
+            <PrePosition X="0.4938" Y="0.7576" />
             <PreSize X="0.0000" Y="0.0000" />
             <LabelBMFontFile_CNB Type="Normal" Path="fonts/num-yellow.fnt" />
           </NodeObjectData>
@@ -147,7 +147,7 @@
                     <CColor A="255" R="255" G="255" B="255" />
                     <Size X="80.0000" Y="106.0000" />
                     <PrePosition X="0.4845" Y="0.7125" />
-                    <PreSize X="0.0000" Y="0.0000" />
+                    <PreSize X="0.2749" Y="0.5300" />
                     <LabelBMFontFile_CNB Type="Normal" Path="fonts/num-green.fnt" />
                   </NodeObjectData>
                   <NodeObjectData Name="Text_1" ActionTag="-1496103488" FrameEvent="" Tag="168" ObjectIndex="1" FontSize="32" LabelText="底注：" ctype="TextObjectData">
@@ -176,6 +176,15 @@
                     <CColor A="255" R="217" G="193" B="253" />
                     <Size X="80.0000" Y="23.0000" />
                     <PrePosition X="0.4948" Y="0.2100" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                  </NodeObjectData>
+                  <NodeObjectData Name="Text_5_Copy" ActionTag="-912632463" FrameEvent="" Tag="10" ObjectIndex="6" FontSize="40" LabelText="Text Label" ctype="TextObjectData">
+                    <Position X="149.0000" Y="168.0000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <Size X="182.0000" Y="45.0000" />
+                    <PrePosition X="0.5120" Y="0.8400" />
                     <PreSize X="0.0000" Y="0.0000" />
                   </NodeObjectData>
                 </Children>
@@ -217,7 +226,7 @@
                     <CColor A="255" R="255" G="255" B="255" />
                     <Size X="80.0000" Y="106.0000" />
                     <PrePosition X="0.4760" Y="0.7075" />
-                    <PreSize X="0.0000" Y="0.0000" />
+                    <PreSize X="0.2740" Y="0.5300" />
                     <LabelBMFontFile_CNB Type="Normal" Path="fonts/num-green.fnt" />
                   </NodeObjectData>
                   <NodeObjectData Name="Text_1_Copy" ActionTag="456445149" FrameEvent="" Tag="178" ObjectIndex="3" FontSize="32" LabelText="底注：" ctype="TextObjectData">
@@ -246,6 +255,15 @@
                     <CColor A="255" R="217" G="193" B="253" />
                     <Size X="80.0000" Y="23.0000" />
                     <PrePosition X="0.0000" Y="0.0000" />
+                    <PreSize X="0.0000" Y="0.0000" />
+                  </NodeObjectData>
+                  <NodeObjectData Name="Text_5" ActionTag="-1815619669" FrameEvent="" Tag="10" ObjectIndex="5" FontSize="40" LabelText="Text Label" ctype="TextObjectData">
+                    <Position X="142.0000" Y="171.0000" />
+                    <Scale ScaleX="1.0000" ScaleY="1.0000" />
+                    <AnchorPoint ScaleX="0.5000" ScaleY="0.5000" />
+                    <CColor A="255" R="255" G="255" B="255" />
+                    <Size X="182.0000" Y="45.0000" />
+                    <PrePosition X="0.4863" Y="0.8550" />
                     <PreSize X="0.0000" Y="0.0000" />
                   </NodeObjectData>
                 </Children>

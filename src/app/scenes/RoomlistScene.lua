@@ -6,7 +6,7 @@ end)
 function RoomlistScene:ctor()
 	local roomlist = cc.uiloader:load("roomlist.csb"):addTo(self)
     local top = require("app.views.Top").new(roomlist:getChildByTag(182))
-    
+    self.top = top
     local listview = roomlist:getChildByTag(181)
     local model = roomlist:getChildByTag(165)
     model:setVisible(false)
@@ -22,6 +22,8 @@ function RoomlistScene:ctor()
 		end
 		local item = panel_item:getChildByTag(index)
         item:setTag(j)
+        item:getChildByTag(1):setVisible(false)
+        item:getChildByTag(10):setString(v.name)
 		item:getChildByTag(2):setString(utils.numAbbrZh(v.blind))
 		item:getChildByTag(3):setString("进房下限".. utils.numAbbrZh(v.min))
         item:addTouchEventListener(handler(self, self["toPlay"]))
@@ -72,6 +74,7 @@ function RoomlistScene:onEnter()
 end
 
 function RoomlistScene:onExit()
+    self.top:hide()
 end
 
 return RoomlistScene

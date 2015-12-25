@@ -8,7 +8,8 @@ function ParseXml.parseRoomInfo(roomdata)
 		if v["@attributes"].type == "K1" then
 			for i,v1 in ipairs(v.item) do
 				item = v1["@attributes"]
-				table.insert(CONFIG.roominfo,{blind =  checkint(item.blind),min = checkint(item.min),typeId = checkint(item.rid)})
+				-- dump(item)
+				table.insert(CONFIG.roominfo,{blind =  checkint(item.blind),min = checkint(item.min),typeId = checkint(item.rid),name = item.name})
 			end
 		elseif v["@attributes"].type == "B1" then
 			if #v.item > 1 then
