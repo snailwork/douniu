@@ -733,7 +733,7 @@
 			<key>rank/address.png</key>
 			<dict>
 				<key>frame</key>
-				<string>{{1476,878},{42,42}}</string>
+				<string>{{1374,1178},{42,42}}</string>
 				<key>offset</key>
 				<string>{0,0}</string>
 				<key>rotated</key>
@@ -2060,6 +2060,17 @@
 				<false />
 				<key>sourceSize</key>
 				<string>{59,59}</string>
+			</dict>
+			<key>menu/stand.png</key>
+			<dict>
+				<key>frame</key>
+				<string>{{1476,878},{44,42}}</string>
+				<key>offset</key>
+				<string>{0,0}</string>
+				<key>rotated</key>
+				<false />
+				<key>sourceSize</key>
+				<string>{44,42}</string>
 			</dict>
 		</dict>
 		<key>metadata</key>
